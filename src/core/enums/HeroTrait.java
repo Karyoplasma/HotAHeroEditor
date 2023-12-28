@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum HeroTrait {	
 	PATHFINDING("Pathfinding", 0x00000000),

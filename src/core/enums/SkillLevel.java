@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum SkillLevel {
 	NONE("None", 0x00000000),

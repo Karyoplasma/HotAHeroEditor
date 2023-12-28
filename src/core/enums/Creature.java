@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum Creature {
 	PIKEMAN("Pikeman", 0x00000000),

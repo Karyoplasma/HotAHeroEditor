@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum Profession {
 	KNIGHT("Knight", 0x00000000),

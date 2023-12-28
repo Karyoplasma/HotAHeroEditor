@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum Spell {
 	SUMMON_BOAT("Summon Boat", 0x00000000),

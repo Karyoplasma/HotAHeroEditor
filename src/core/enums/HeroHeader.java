@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum HeroHeader {
 	ORRIN("Orrin", "Archery", 0x279dd0),

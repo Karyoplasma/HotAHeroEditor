@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum Gender {
 	MALE("Male", 0x00000000),

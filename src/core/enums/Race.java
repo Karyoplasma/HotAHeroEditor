@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 public enum Race {
 	DEMON("Demon", 0x00000000),
