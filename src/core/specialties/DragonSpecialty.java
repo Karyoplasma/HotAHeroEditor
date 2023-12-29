@@ -34,5 +34,14 @@ public class DragonSpecialty implements Specialty {
 	public String toString() {
 		return "Dragons";
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof DragonSpecialty)) {
+			return false;
+		}
+		DragonSpecialty other = (DragonSpecialty) o;
+		return (attack == other.attack) && (defense == other.defense);
+	}
+	
 }

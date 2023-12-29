@@ -43,4 +43,13 @@ public class CreatureConversionSpecialty implements Specialty {
 	public String toString() {
 		return this.result.toString() + " conversion";
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof CreatureConversionSpecialty)) {
+			return false;
+		}
+		CreatureConversionSpecialty other = (CreatureConversionSpecialty) o;
+		return (allowed1 == other.allowed1) && (allowed2 == other.allowed2) && (result == other.result);
+	}
 }

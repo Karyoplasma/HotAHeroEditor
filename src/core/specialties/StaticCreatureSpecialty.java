@@ -38,5 +38,14 @@ public class StaticCreatureSpecialty implements Specialty {
 	public String toString() {
 		return this.creature.toString() + " (static)";
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof StaticCreatureSpecialty)) {
+			return false;
+		}
+		StaticCreatureSpecialty other = (StaticCreatureSpecialty) o;
+		return (creature == other.creature) && (attack == other.attack) && (defense == other.defense) && (damage == other.damage);
+	}
+	
 }

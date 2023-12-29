@@ -31,4 +31,14 @@ public class SkillSpecialty implements Specialty {
 	public String toString() {
 		return skill.toString();
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof SkillSpecialty)) {
+			return false;
+		}
+		SkillSpecialty other = (SkillSpecialty) o;
+		return skill == other.skill;
+	}
+	
 }

@@ -56,5 +56,13 @@ public class ResourceSpecialty implements Specialty {
 			return "";
 		}
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof ResourceSpecialty)) {
+			return false;
+		}
+		ResourceSpecialty other = (ResourceSpecialty) o;
+		return resource == other.resource;
+	}
 }

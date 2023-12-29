@@ -31,5 +31,14 @@ public class SpellSpecialty implements Specialty {
 	public String toString() {
 		return this.spell.toString();
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof SpellSpecialty)) {
+			return false;
+		}
+		SpellSpecialty other = (SpellSpecialty) o;
+		return spell == other.spell;
+	}
+	
 }

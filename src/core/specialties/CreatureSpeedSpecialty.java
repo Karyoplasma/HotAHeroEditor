@@ -7,6 +7,7 @@ import core.enums.SpecialtyType;
 public class CreatureSpeedSpecialty implements Specialty {
 	
 	private int bonus;
+	
 	public CreatureSpeedSpecialty(int bonus) {
 		this.bonus = bonus;
 	}
@@ -29,4 +30,14 @@ public class CreatureSpeedSpecialty implements Specialty {
 	public String toString() {
 		return "Creature speed +" + Integer.reverseBytes(this.bonus);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof CreatureSpeedSpecialty)) {
+			return false;
+		}
+		CreatureSpeedSpecialty other = (CreatureSpeedSpecialty) o;
+		return bonus == other.bonus;
+	}
+	
 }

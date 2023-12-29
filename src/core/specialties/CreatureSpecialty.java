@@ -31,4 +31,13 @@ public class CreatureSpecialty implements Specialty {
 	public String toString() {
 		return this.creature.toString();
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof CreatureSpecialty)) {
+			return false;
+		}
+		CreatureSpecialty other = (CreatureSpecialty) o;
+		return creature == other.creature;
+	}
 }
