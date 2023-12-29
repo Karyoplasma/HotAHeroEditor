@@ -84,7 +84,15 @@ public enum Spell {
 	public int getBytes() {
 		return bytes;
 	}
-
+	
+	public static Spell getSpellByBytes(int bytes) {
+		for (Spell spell : Spell.values()) {
+			if (spell.getBytes() == bytes) {
+				return spell;
+			}
+		}
+		return null;
+	}
 	@Override
 	public String toString() {
 		return name;

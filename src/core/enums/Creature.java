@@ -165,7 +165,7 @@ public enum Creature {
 				return creature;
 			}
 		}
-		return Creature.NONE;
+		return null;
 	}
 
 	@Override

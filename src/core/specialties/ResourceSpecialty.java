@@ -7,7 +7,7 @@ import core.enums.SpecialtyType;
 
 public class ResourceSpecialty implements Specialty {
 	
-	Resource resource;
+	private Resource resource;
 	
 	public ResourceSpecialty(Resource resource) {
 		this.resource = resource;
