@@ -27,3 +27,6 @@ replay_pid*
 # settings
 /.settings/
 /.git/
+
+# resource files
+/resources/
