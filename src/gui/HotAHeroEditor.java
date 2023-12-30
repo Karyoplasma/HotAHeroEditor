@@ -126,11 +126,11 @@ public class HotAHeroEditor {
 		frame.getContentPane().add(btnDiscardAll, "cell 4 4");
 	}
 
-	private Path initializeSaveDirectory() {
+	private void initializeSaveDirectory() {
 		try (BufferedReader reader = new BufferedReader(new FileReader("resources/directoryPath.txt"))) {
-			return Paths.get(reader.readLine());
+			this.saveDirectory = Paths.get(reader.readLine());
 		} catch (IOException e) {
-			return null;
+			//ignore error
 		}
 
 	}

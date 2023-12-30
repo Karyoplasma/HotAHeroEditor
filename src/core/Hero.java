@@ -228,8 +228,42 @@ public class Hero {
 	}
 
 	public void debug() {
-		System.out.println(String.format("%s (%s); %s, %s; %s, %s", header.toString(), specialty.toString(),
-				secondary1.toString(), secondary2.toString(), spellBook.toString(), Arrays.toString(startingTroops)));
+		try {
+			System.out.println(String.format("%s (%s); %s, %s; %s, %s", header.toString(), specialty.toString(),
+					secondary1.toString(), secondary2.toString(), spellBook.toString(),
+					Arrays.toString(startingTroops)));
+		} catch (NullPointerException e) {
+			System.err.print(header.toString() + " had a null! ");
+			if (specialty == null) {
+				System.err.print("NULL specialty! ");
+			} else {
+				System.err.print(specialty.toString());
+			}
+			if (secondary1 == null) {
+				System.err.println("NULL secondary 1! ");
+			} else {
+				System.err.print(secondary1.toString());
+			}
+			if (secondary2 == null) {
+				System.err.println("NULL secondary 2! ");
+			} else {
+				System.err.print(secondary2.toString());
+			}
+			if (spellBook == null) {
+				System.err.println("NULL Spellbook! ");
+			} else {
+				System.err.print(spellBook.toString());
+			}
+			for (int i = 0; i<3; i++) {
+				if (startingTroops[i] == null) {
+					System.err.print("NULL startingTroop[" + i + "]!");
+				} else {
+					System.err.print(startingTroops[i]);
+				}
+			}
+			System.err.println();
+		}
+
 	}
 
 	@Override

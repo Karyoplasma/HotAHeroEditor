@@ -6,6 +6,7 @@ import core.enums.Creature;
 import core.enums.HeroTrait;
 import core.enums.Resource;
 import core.enums.Spell;
+import core.specialties.AdrienneSpecialty;
 import core.specialties.CreatureConversionSpecialty;
 import core.specialties.CreatureSpecialty;
 import core.specialties.CreatureSpeedSpecialty;
@@ -48,6 +49,8 @@ public class SpecialtyFactory {
 		case 0x07000000:
 			buffer.getInt();
 			return new DragonSpecialty(buffer.getInt(), buffer.getInt());
+		case 0xFFFFFFFF:
+			return new AdrienneSpecialty();
 		default:
 			return null;
 		}
