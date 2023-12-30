@@ -29,4 +29,5 @@ replay_pid*
 /.git/
 
 # resource files
+*.txt
 *.mod
