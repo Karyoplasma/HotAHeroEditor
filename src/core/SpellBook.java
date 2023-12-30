@@ -19,6 +19,11 @@ public class SpellBook {
 	}
 	
 	@Override
+	public String toString() {
+		return this.spell == Spell.NONE ? "No Spellbook" : spell.toString();
+	}
+	
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof SpellBook)) {
 			return false;

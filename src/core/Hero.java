@@ -46,20 +46,19 @@ public class Hero {
 	}
 
 	public String getName() {
-		return header.getName();
+		return header.toString();
 	}
 
 	public Specialty getSpecialty() {
 		return specialty;
 	}
 
-	public long getHeroOffset() {
-		return header.getOffset();
+	public long getDataOffset() {
+		return header.getDataOffset();
 	}
 
 	public long getSpecialtyOffset() {
-		// TODO change HeroHeader for specialty offsets and return that;
-		return 0;
+		return header.getSpecialtyOffset();
 	}
 
 	public Profession getProfession() {
@@ -226,6 +225,11 @@ public class Hero {
 		}
 		buffer.flip();
 		return buffer;
+	}
+
+	public void debug() {
+		System.out.println(String.format("%s (%s); %s, %s; %s, %s", header.toString(), specialty.toString(),
+				secondary1.toString(), secondary2.toString(), spellBook.toString(), Arrays.toString(startingTroops)));
 	}
 
 	@Override
