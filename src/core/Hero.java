@@ -83,7 +83,11 @@ public class Hero {
 		}
 		return this.spellBook.getSpell();
 	}
-
+	
+	public SpellBook getSpellBook() {
+		return this.spellBook;
+	}
+	
 	public Creature[] getStartingTroops() {
 		return startingTroops;
 	}

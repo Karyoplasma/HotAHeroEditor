@@ -34,7 +34,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		Path executable = this.getH3Executable();
 		if (executable != null) {
-			this.readExecutable(executable);
+			this.readExecutable(executable, gui.isHotA());
 		}
 	}
 
@@ -70,7 +70,12 @@ public class OpenExecutableButtonAction extends AbstractAction {
 		} else {
 			return null;
 		}
-		
+		if (executable.getName().toLowerCase().matches("heroes3(\\shd)?.exe")){
+			gui.setIsHotA(false);
+		}
+		if (executable.getName().toLowerCase().matches("h3hota(\\shd)?.exe")) {
+			this.gui.setIsHotA(true);
+		}
 		if (!executable.getParentFile().getAbsolutePath().equals(saveDirectory.toAbsolutePath().toString())) {
 			saveDirectoyPreference = true;
 		}
@@ -99,10 +104,10 @@ public class OpenExecutableButtonAction extends AbstractAction {
 
 	}
 
-	private void readExecutable(Path executable) {
+	private void readExecutable(Path executable, boolean isHotA) {
 		Map<String, Hero> heroes = new LinkedHashMap<String, Hero>();
 		try {
-			heroes = H3ExecutableReader.readHeroes(executable);
+			heroes = H3ExecutableReader.readHeroes(executable, isHotA);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null,
 					"Error reading heroes from the executable:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

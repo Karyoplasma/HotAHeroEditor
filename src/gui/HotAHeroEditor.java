@@ -38,6 +38,7 @@ public class HotAHeroEditor {
 	private JButton btnDiscardAll;
 	private JButton btnWrite;
 	private JButton btnUnlock;
+	private boolean isHotA;
 
 	/**
 	 * Launch the application.
@@ -163,7 +164,14 @@ public class HotAHeroEditor {
 	public JTable getTableChanges() {
 		return tableChanges;
 	}
-
+	
+	public boolean isHotA() {
+		return isHotA;
+	}
+	
+	public void setIsHotA(boolean isHotA) {
+		this.isHotA = isHotA;
+	}
 	public void setHeroes(Map<String, Hero> heroes) {
 		this.heroes = heroes;
 		this.btnLoad.setEnabled(true);
