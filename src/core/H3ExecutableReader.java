@@ -41,8 +41,8 @@ public class H3ExecutableReader {
 			bufferHeroData.flip();
 			bufferSpecialtyData.flip();
 			Gender gender = (bufferHeroData.getInt() == 0x00000000) ? Gender.MALE : Gender.FEMALE;
-			Race race = Race.values()[Integer.reverseBytes(bufferHeroData.getInt())];
-			Profession profession = Profession.values()[Integer.reverseBytes(bufferHeroData.getInt())];
+			Race race = Race.getRaceByBytes(bufferHeroData.getInt());
+			Profession profession = Profession.getProfessionByBytes(bufferHeroData.getInt());
 			HeroTrait skill1 = HeroTrait.getHeroTraitByBytes(bufferHeroData.getInt());
 			SecondarySkill secondary1 = new SecondarySkill(skill1, SkillLevel.values()[Integer.reverseBytes(bufferHeroData.getInt())]);
 			HeroTrait skill2 = HeroTrait.getHeroTraitByBytes(bufferHeroData.getInt());
@@ -74,8 +74,8 @@ public class H3ExecutableReader {
 				bufferHeroData.flip();
 				bufferSpecialtyData.flip();
 				Gender gender = (bufferHeroData.getInt() == 0x00000000) ? Gender.MALE : Gender.FEMALE;
-				Race race = Race.values()[Integer.reverseBytes(bufferHeroData.getInt())];
-				Profession profession = Profession.values()[Integer.reverseBytes(bufferHeroData.getInt())];
+				Race race = Race.getRaceByBytes(bufferHeroData.getInt());
+				Profession profession = Profession.getProfessionByBytes(bufferHeroData.getInt());
 				HeroTrait skill1 = HeroTrait.getHeroTraitByBytes(bufferHeroData.getInt());
 				SecondarySkill secondary1 = new SecondarySkill(skill1, SkillLevel.values()[Integer.reverseBytes(bufferHeroData.getInt())]);
 				HeroTrait skill2 = HeroTrait.getHeroTraitByBytes(bufferHeroData.getInt());

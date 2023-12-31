@@ -11,6 +11,7 @@ import core.specialties.CreatureConversionSpecialty;
 import core.specialties.CreatureSpecialty;
 import core.specialties.CreatureSpeedSpecialty;
 import core.specialties.DragonSpecialty;
+import core.specialties.FrederickSpecialty;
 import core.specialties.ResourceSpecialty;
 import core.specialties.SkillSpecialty;
 import core.specialties.Specialty;
@@ -49,6 +50,8 @@ public class SpecialtyFactory {
 		case 0x07000000:
 			buffer.getInt();
 			return new DragonSpecialty(buffer.getInt(), buffer.getInt());
+		case 0x08000000:
+			return new FrederickSpecialty();
 		case 0xFFFFFFFF:
 			return new AdrienneSpecialty();
 		default:

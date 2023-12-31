@@ -20,20 +20,32 @@ public enum Profession {
 	PLANESWALKER("Planeswalker", 0x10000000),
 	ELEMENTALIST("Elementalist", 0x11000000),
 	CAPTAIN("Captain", 0x12000000),
-	NAVIGATOR("Navigator", 0x13000000);
-	
+	NAVIGATOR("Navigator", 0x13000000),
+	MERCENARY("Mercenary", 0x14000000),
+	ARTIFICER("Artificer", 0x15000000),
+	DEBUG("DEBUG", 0xDEADBEEF);
+
 	private String profession;
-	private int id;
-	
-	private Profession(String profession, int id) {
+	private int bytes;
+
+	private Profession(String profession, int bytes) {
 		this.profession = profession;
-		this.id = id;
+		this.bytes = bytes;
 	}
-	
-	public int getID() {
-		return this.id;
+
+	public int getBytes() {
+		return this.bytes;
 	}
-	
+
+	public static Profession getProfessionByBytes(int bytes) {
+		for (Profession profession : Profession.values()) {
+			if (profession.getBytes() == bytes) {
+				return profession;
+			}
+		}
+		return Profession.DEBUG;
+	}
+
 	@Override
 	public String toString() {
 		return this.profession;

@@ -71,7 +71,8 @@ public enum Spell {
 	EARTH_ELEMENTAL("Earth Elemental", 0x43000000),
 	WATER_ELEMENTAL("Water Elemental", 0x44000000),
 	AIR_ELEMENTAL("Air Elemental", 0x45000000),
-	NONE("None", 0xFFFFFFFF);
+	NONE("None", 0xFFFFFFFF),
+	DEBUG("DEBUG", 0xDEADBEEF);
 
 	private String name;
 	private int bytes;
@@ -91,7 +92,7 @@ public enum Spell {
 				return spell;
 			}
 		}
-		return null;
+		return Spell.DEBUG;
 	}
 	@Override
 	public String toString() {

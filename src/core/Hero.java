@@ -83,11 +83,11 @@ public class Hero {
 		}
 		return this.spellBook.getSpell();
 	}
-	
+
 	public SpellBook getSpellBook() {
 		return this.spellBook;
 	}
-	
+
 	public Creature[] getStartingTroops() {
 		return startingTroops;
 	}
@@ -233,8 +233,8 @@ public class Hero {
 
 	public void debug() {
 		try {
-			System.out.println(String.format("%s (%s); %s, %s; %s, %s", header.toString(), specialty.toString(),
-					secondary1.toString(), secondary2.toString(), spellBook.toString(),
+			System.out.println(String.format("%s (%s); %s, %s; %s, %s; %s, %s", header.toString(), specialty.toString(),
+					race, profession, secondary1.toString(), secondary2.toString(), spellBook.toString(),
 					Arrays.toString(startingTroops)));
 		} catch (NullPointerException e) {
 			System.err.print(header.toString() + " had a null! ");
@@ -258,7 +258,7 @@ public class Hero {
 			} else {
 				System.err.print(spellBook.toString());
 			}
-			for (int i = 0; i<3; i++) {
+			for (int i = 0; i < 3; i++) {
 				if (startingTroops[i] == null) {
 					System.err.print("NULL startingTroop[" + i + "]!");
 				} else {

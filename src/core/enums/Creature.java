@@ -147,6 +147,7 @@ public enum Creature {
 	AMMO_CART("Ammo Cart", 0x94000000),
 	CANNON("Cannon", 0x96000000),
 	SEA_DOG("Sea Dog", 0x97000000),
+	ELECTRIC_TOWER("Electric Tower", 0x98000000),
 	NYMPH("Nymph", 0x99000000),
 	OCEANID("Oceanid", 0x9A000000),
 	CREW_MATE("Crew Mate", 0x9B000000),
@@ -161,7 +162,27 @@ public enum Creature {
 	NIX_WARRIOR("Nix Warrior", 0xA4000000),
 	SEA_SERPENT("Sea Serpent", 0xA5000000),
 	HASPID("Haspid", 0xA6000000),
-	NONE("None", 0xFFFFFFFF);
+	SATYR("Satyr", 0xA7000000),
+	FANGARM("Fangarm", 0xA8000000),
+	LEPRECHAUN("Leprechaun", 0xA9000000),
+	STEEL_GOLEM("Steel Golem", 0xAA000000),
+	HALFLING_GRENADIER("Halfling Grenadier", 0xAB000000),
+	MECHANICS("Mechanics", 0xAC000000),
+	ENGINEERS("Engineers", 0xAD000000),
+	ARMADILLO("Armadillo", 0xAE000000),
+	BELLWETHER_ARMADILLO("Bellwether Armadillo", 0xAF000000),
+	AUTOMATON("Automaton", 0xB0000000),
+	SENTINEL_AUTOMATON("Sentinel Automaton", 0xB1000000),
+	SANDWORM("Sandworm", 0xB2000000),
+	OLGOI_KHORKHOI("Olgoi-Khorkhoi", 0xB3000000),
+	GUNSLINGER("Gunslinger", 0xB4000000),
+	BOUNTY_HUNTER("Bounty Hunter", 0xB5000000),
+	COUATL("Couatl", 0xB6000000),
+	CRIMSON_COUATL("Crimson Couatl", 0xB7000000),
+	DREADNOUGHT("Dreadnought", 0xB8000000),
+	JUGGERNAUT("Juggernaut", 0xB9000000),
+	NONE("None", 0xFFFFFFFF),
+	DEBUG("DEBUG", 0xDEADBEEF);
 
 	private String name;
 	private int bytes;
@@ -181,7 +202,7 @@ public enum Creature {
 				return creature;
 			}
 		}
-		return null;
+		return Creature.DEBUG;
 	}
 
 	@Override

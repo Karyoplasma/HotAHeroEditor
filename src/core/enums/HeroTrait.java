@@ -29,7 +29,9 @@ public enum HeroTrait {
 	SORCERY("Sorcery", 0x19000000),
 	RESISTANCE("Resistance", 0x1A000000),
 	FIRST_AID("First Aid", 0x1B000000),
-	NONE("None", 0xFFFFFFFF);
+	INTERFERENCE("Interference", 0x1C000000),
+	NONE("None", 0xFFFFFFFF),
+	DEBUG("DEBUG", 0xDEADBEEF);
 
 	private String name;
 	private int bytes;
@@ -49,7 +51,7 @@ public enum HeroTrait {
 				return trait;
 			}
 		}
-		return null;
+		return HeroTrait.DEBUG;
 	}
 
 	@Override

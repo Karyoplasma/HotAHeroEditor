@@ -10,16 +10,16 @@ import core.enums.Race;
 import core.specialties.Specialty;
 
 public class HotaHero extends Hero {
-	
+
 	HotAHeroHeader header;
-	
+
 	public HotaHero(HotAHeroHeader header, Gender gender, Race race, Profession profession, Specialty specialty,
 			SecondarySkill secondary1, SecondarySkill secondary2, SpellBook spellBook, Creature[] startingTroops,
 			HeroChange change) {
 		super(null, gender, race, profession, specialty, secondary1, secondary2, spellBook, startingTroops, change);
 		this.header = header;
 	}
-	
+
 	public HotAHeroHeader getHotAHeader() {
 		return header;
 	}
@@ -28,21 +28,22 @@ public class HotaHero extends Hero {
 	public String getName() {
 		return header.toString();
 	}
-	
+
 	@Override
 	public long getDataOffset() {
 		return header.getDataOffset();
 	}
-	
+
 	@Override
 	public long getSpecialtyOffset() {
 		return header.getSpecialtyOffset();
 	}
-	
+
 	@Override
 	public void debug() {
 		try {
-			System.out.println(String.format("%s (%s); %s, %s; %s, %s", header.toString(), super.getSpecialty().toString(),
+			System.out.println(String.format("%s (%s); %s, %s; %s, %s; %s, %s", header.toString(),
+					super.getSpecialty().toString(), super.getRace(), super.getProfession(),
 					super.getSecondary1().toString(), super.getSecondary2().toString(), super.getSpell().toString(),
 					Arrays.toString(super.getStartingTroops())));
 		} catch (NullPointerException e) {
@@ -67,7 +68,7 @@ public class HotaHero extends Hero {
 			} else {
 				System.err.print(super.getSpellBook().toString());
 			}
-			for (int i = 0; i<3; i++) {
+			for (int i = 0; i < 3; i++) {
 				if (super.getStartingTroops()[i] == null) {
 					System.err.print("NULL startingTroop[" + i + "]!");
 				} else {
@@ -77,7 +78,7 @@ public class HotaHero extends Hero {
 			System.err.println();
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getName();

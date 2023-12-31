@@ -9,7 +9,8 @@ public enum SpecialtyType {
 	CREATURE_BONUS_SPEED("Creature speed bonus", 0x05000000),
 	CREATURE_CONVERSION("Creature conversion", 0x06000000),
 	DRAGON_BONUS("Static dragon bonus", 0x070000000),
-	ADRIENNE("Starts with an Expert level skill", 0xFFFFFFFF);
+	FREDERICK_SPECIALTY("Armadillo Explosions", 0x08000000),
+	ADRIENNE_SPECIALTY("Starts with an Expert level skill", 0xFFFFFFFF);
 	
 	private String name;
 	private int bytes;

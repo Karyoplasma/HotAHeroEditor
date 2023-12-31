@@ -14,20 +14,35 @@ public enum Race {
 	MINOTAUR("Minotaur", 0x0a000000),
 	OGRE("Ogre", 0x0b000000),
 	TROGLODYTE("Troglodyte", 0x0c000000),
-	VAMPIRE("Vampire", 0x0d000000);
-	
+	VAMPIRE("Vampire", 0x0d000000),
+	NYMPH("Nymph", 0x11000000),
+	NIX("Nix", 0x12000000),
+	HALFLING("Halfling", 0x13000000),
+	DARK_ELF("Dark Elf", 0x14000000),
+	GREMLIN("Gremlin", 0x15000000),
+	DEBUG("DEBUG", 0xDEADBEEF);
+
 	private String race;
 	private int bytes;
-	
+
 	private Race(String race, int bytes) {
 		this.race = race;
 		this.bytes = bytes;
 	}
-	
-	public int getID() {
+
+	public int getBytes() {
 		return this.bytes;
 	}
-	
+
+	public static Race getRaceByBytes(int bytes) {
+		for (Race race : Race.values()) {
+			if (race.bytes == bytes) {
+				return race;
+			}
+		}
+		return Race.DEBUG;
+	}
+
 	@Override
 	public String toString() {
 		return this.race;
