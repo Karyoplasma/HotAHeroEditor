@@ -145,6 +145,22 @@ public enum Creature {
 	BALLISTA("Ballista", 0x92000000),
 	FIRST_AID_TENT("First Aid Tent", 0x93000000),
 	AMMO_CART("Ammo Cart", 0x94000000),
+	CANNON("Cannon", 0x96000000),
+	SEA_DOG("Sea Dog", 0x97000000),
+	NYMPH("Nymph", 0x99000000),
+	OCEANID("Oceanid", 0x9A000000),
+	CREW_MATE("Crew Mate", 0x9B000000),
+	SEAMAN("Seaman", 0x9C000000),
+	PIRATE("Pirate", 0x9D000000),
+	CORSAIR("Corsair", 0x9E000000),
+	STORMBIRD("Stormbird", 0x9F000000),
+	AYSSID("Ayssid", 0xA0000000),
+	SEA_WITCH("Sea Witch", 0xA1000000),
+	SORCERESS("Sorceress", 0xA2000000),
+	NIX("Nix", 0xA3000000),
+	NIX_WARRIOR("Nix Warrior", 0xA4000000),
+	SEA_SERPENT("Sea Serpent", 0xA5000000),
+	HASPID("Haspid", 0xA6000000),
 	NONE("None", 0xFFFFFFFF);
 
 	private String name;

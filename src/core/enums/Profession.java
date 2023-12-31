@@ -18,7 +18,9 @@ public enum Profession {
 	BEASTMASTER("Beastmaster", 0x0e000000),
 	WITCH("Witch", 0x0f000000),
 	PLANESWALKER("Planeswalker", 0x10000000),
-	ELEMENTALIST("Elementalist", 0x11000000);
+	ELEMENTALIST("Elementalist", 0x11000000),
+	CAPTAIN("Captain", 0x12000000),
+	NAVIGATOR("Navigator", 0x13000000);
 	
 	private String profession;
 	private int id;

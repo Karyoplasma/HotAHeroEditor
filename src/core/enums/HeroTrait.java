@@ -27,8 +27,8 @@ public enum HeroTrait {
 	ARMORER("Armorer", 0x17000000),
 	INTELLIGENCE("Intelligence", 0x18000000),
 	SORCERY("Sorcery", 0x19000000),
-	RESISTANCE("Resistance", 0x1a000000),
-	FIRST_AID("First Aid", 0x1b000000),
+	RESISTANCE("Resistance", 0x1A000000),
+	FIRST_AID("First Aid", 0x1B000000),
 	NONE("None", 0xFFFFFFFF);
 
 	private String name;

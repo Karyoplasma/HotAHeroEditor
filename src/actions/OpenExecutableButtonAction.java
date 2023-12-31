@@ -11,24 +11,23 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import core.H3ExecutableReader;
 import core.Hero;
+import gui.HotAHeroEditor;
 
 public class OpenExecutableButtonAction extends AbstractAction {
 
 	private static final long serialVersionUID = -3489967101763061385L;
 	private Path saveDirectory;
-	private JCheckBox chckSaveDirectory;
+	private HotAHeroEditor gui;
 	
-	public OpenExecutableButtonAction(Path saveDirectory, JCheckBox chckbxSaveDirectory) {
+	public OpenExecutableButtonAction(Path saveDirectory, HotAHeroEditor hotAHeroEditor) {
 		putValue(Action.NAME, "Open executable");
 		this.saveDirectory = saveDirectory;
-		this.chckSaveDirectory = chckbxSaveDirectory;
+		this.gui = hotAHeroEditor;
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 			executable = fileChooser.getSelectedFile();
 			if (!(executable.getName().toLowerCase().matches("h3hota(\\shd)?.exe")
 					|| executable.getName().toLowerCase().matches("heroes3(\\shd)?.exe"))) {
-				int option = JOptionPane.showConfirmDialog(null,
+				int option = JOptionPane.showConfirmDialog(gui.getFrame(),
 						"The selected file does not match the expected filename.\nDo you want to select a different file?",
 						"Incorrect File", JOptionPane.YES_NO_OPTION);
 				if (option == JOptionPane.YES_OPTION) {
@@ -72,11 +71,11 @@ public class OpenExecutableButtonAction extends AbstractAction {
 			return null;
 		}
 		
-		if (!executable.getParentFile().getAbsolutePath().equals(saveDirectory)) {
+		if (!executable.getParentFile().getAbsolutePath().equals(saveDirectory.toAbsolutePath().toString())) {
 			saveDirectoyPreference = true;
 		}
 		
-		if (saveDirectoyPreference && chckSaveDirectory.isSelected()) {
+		if (saveDirectoyPreference && gui.savePathPreference()) {
 			this.saveDirectoryPreference(executable.toPath());
 		}
 
@@ -120,6 +119,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 			for (Hero hero : heroes.values()) {
 				hero.debug();
 			}
+			gui.setHeroes(heroes);
 		}
 	}
 }

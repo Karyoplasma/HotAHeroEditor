@@ -13,11 +13,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import actions.OpenExecutableButtonAction;
+import core.Hero;
 
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -25,11 +27,18 @@ import java.awt.BorderLayout;
 
 public class HotAHeroEditor {
 
+	private Map<String, Hero> heroes;
 	private JFrame frame;
 	private JTable tableEditor;
 	private JTable tableChanges;
 	private Path saveDirectory;
-	
+	private JCheckBox chckbxSaveDirectory;
+	private JButton btnLoad;
+	private JButton btnSave;
+	private JButton btnDiscardAll;
+	private JButton btnWrite;
+	private JButton btnUnlock;
+
 	/**
 	 * Launch the application.
 	 */
@@ -63,20 +72,20 @@ public class HotAHeroEditor {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new MigLayout("", "[][][grow][][]", "[][grow][][grow\r\n][]"));
 
-		JCheckBox chckbxSaveDirectory = new JCheckBox("Save directory");
+		chckbxSaveDirectory = new JCheckBox("Save directory");
 		chckbxSaveDirectory.setSelected(true);
 		frame.getContentPane().add(chckbxSaveDirectory, "cell 1 0,grow");
-		
-		JButton btnOpenExecutable = new JButton(new OpenExecutableButtonAction(saveDirectory, chckbxSaveDirectory));
+
+		JButton btnOpenExecutable = new JButton(new OpenExecutableButtonAction(saveDirectory, this));
 		btnOpenExecutable.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frame.getContentPane().add(btnOpenExecutable, "cell 0 0,grow");
-		
-		JButton btnUnlock = new JButton("Unlock");
+
+		btnUnlock = new JButton("Unlock");
 		btnUnlock.setEnabled(false);
 		btnUnlock.setFont(new Font("Tahoma", Font.BOLD, 14));
 		frame.getContentPane().add(btnUnlock, "cell 3 0,grow");
 
-		JButton btnWrite = new JButton("Write");
+		btnWrite = new JButton("Write");
 		btnWrite.setEnabled(false);
 		btnWrite.setFont(new Font("Tahoma", Font.BOLD, 14));
 		frame.getContentPane().add(btnWrite, "cell 4 0,grow");
@@ -110,17 +119,17 @@ public class HotAHeroEditor {
 		tableChanges.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		scrollPaneChanges.setViewportView(tableChanges);
 
-		JButton btnLoad = new JButton("load");
+		btnLoad = new JButton("load");
 		btnLoad.setEnabled(false);
 		btnLoad.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frame.getContentPane().add(btnLoad, "cell 0 4,grow");
 
-		JButton btnNewButton = new JButton("save");
-		btnNewButton.setEnabled(false);
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(btnNewButton, "cell 1 4,grow");
+		btnSave = new JButton("save");
+		btnSave.setEnabled(false);
+		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		frame.getContentPane().add(btnSave, "cell 1 4,grow");
 
-		JButton btnDiscardAll = new JButton("Discard All");
+		btnDiscardAll = new JButton("Discard All");
 		btnDiscardAll.setEnabled(false);
 		btnDiscardAll.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frame.getContentPane().add(btnDiscardAll, "cell 4 4");
@@ -130,8 +139,34 @@ public class HotAHeroEditor {
 		try (BufferedReader reader = new BufferedReader(new FileReader("resources/directoryPath.txt"))) {
 			this.saveDirectory = Paths.get(reader.readLine());
 		} catch (IOException e) {
-			//ignore error
+			// ignore error
 		}
 
+	}
+
+	public boolean savePathPreference() {
+		return this.chckbxSaveDirectory.isSelected();
+	}
+
+	public Map<String, Hero> getHeroes() {
+		return this.heroes;
+	}
+
+	public JFrame getFrame() {
+		return this.frame;
+	}
+
+	public JTable getTableEditor() {
+		return tableEditor;
+	}
+
+	public JTable getTableChanges() {
+		return tableChanges;
+	}
+
+	public void setHeroes(Map<String, Hero> heroes) {
+		this.heroes = heroes;
+		this.btnLoad.setEnabled(true);
+		// initialize tables
 	}
 }
