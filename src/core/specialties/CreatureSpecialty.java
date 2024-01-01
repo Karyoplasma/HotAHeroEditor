@@ -29,36 +29,7 @@ public class CreatureSpecialty implements Specialty {
 
 	@Override
 	public String toString() {
-		switch (this.creature) {
-		case PIKEMAN:
-			return "Pikemen";
-		case SWORDSMAN:
-			return "Swordsmen";
-		case DWARF:
-			return "Dwarves";
-		case PEGASUS:
-			return "Pegasi";
-		case MAGE:
-			return "Magi";
-		case EFREET:
-			return "Efreeti";
-		case LICH:
-			return "Liches";
-		case HARPY:
-			return "Harpies";
-		case CYCLOPS:
-			return "Cyclopses";
-		case LIZARDMAN:
-			return "Lizardmen";
-		case SERPENT_FLY:
-			return "Serpent Flies";
-		case PIXIES:
-			return "Pixies";
-		case BALLISTA:
-			return "Ballista";
-		default:
-			return this.creature.toString() + "s";
-		}
+		return this.creature.getPlural();
 	}
 
 	@Override

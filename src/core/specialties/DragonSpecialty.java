@@ -17,7 +17,6 @@ public class DragonSpecialty implements Specialty {
 	public ByteBuffer getByteBuffer() {
 		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 4);
 		buffer.putInt(this.getType().getBytes());
-		// TODO verify this
 		buffer.putInt(0x00000000);
 		buffer.putInt(this.attack);
 		buffer.putInt(this.defense);
