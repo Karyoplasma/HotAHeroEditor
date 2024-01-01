@@ -15,11 +15,14 @@ public class DragonSpecialty implements Specialty {
 
 	@Override
 	public ByteBuffer getByteBuffer() {
-		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 4);
+		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 7);
 		buffer.putInt(this.getType().getBytes());
 		buffer.putInt(0x00000000);
 		buffer.putInt(this.attack);
 		buffer.putInt(this.defense);
+		buffer.putInt(0x00000000);
+		buffer.putInt(0x00000000);
+		buffer.putInt(0x00000000);
 		buffer.flip();
 		return buffer;
 	}

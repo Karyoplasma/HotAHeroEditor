@@ -23,9 +23,14 @@ public class ResourceSpecialty implements Specialty {
 	
 	@Override
 	public ByteBuffer getByteBuffer() {
-		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 2);
+		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 7);
 		buffer.putInt(this.getType().getBytes());
 		buffer.putInt(this.resource.getBytes());
+		buffer.putInt(0x00000000);
+		buffer.putInt(0x00000000);
+		buffer.putInt(0x00000000);
+		buffer.putInt(0x00000000);
+		buffer.putInt(0x00000000);
 		buffer.flip();
 		return buffer;
 	}
