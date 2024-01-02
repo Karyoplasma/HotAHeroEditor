@@ -15,23 +15,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
+import java.util.Observable;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
-
 import actions.OpenExecutableButtonAction;
 import core.Hero;
-import models.ChangesTableModel;
-
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import java.awt.BorderLayout;
-import java.awt.Component;
 
-public class HotAHeroEditor {
+public class HotAHeroEditor extends Observable{
 
 	private List<Hero> heroes;
 	private JFrame frame;
@@ -45,7 +38,7 @@ public class HotAHeroEditor {
 	private JButton btnWrite;
 	private JButton btnUnlock;
 	private boolean isHotA;
-
+	private Hero currentHero;
 	/**
 	 * Launch the application.
 	 */
@@ -75,7 +68,7 @@ public class HotAHeroEditor {
 	private void initialize() {
 		this.initializeSaveDirectory();
 		this.heroes = new ArrayList<Hero>();
-		
+		this.currentHero = null;
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,12 +175,68 @@ public class HotAHeroEditor {
 	public void setIsHotA(boolean isHotA) {
 		this.isHotA = isHotA;
 	}
+	
+	public void setCurrentHero(Hero currentHero) {
+		this.currentHero = currentHero;
+		setChanged();
+		notifyObservers(this.currentHero);
+	}
+	
 	public void resetHeroes(List<Hero> heroes) {
 		this.heroes.clear();
 		this.heroes.addAll(heroes);
 		this.btnLoad.setEnabled(true);
 		// initialize tables
-		((ChangesTableModel) this.tableChanges.getModel()).initializeData();	
+		//((ChangesTableModel) this.tableChanges.getModel()).initializeData();	
+		//writeListToDisk(heroes);
 	}
-
+	
+//	public static void writeListToDisk(List<Hero> list) {
+//        try {
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("resources/originalHeroes"));
+//            //HeroHeader header, Gender gender, Race race, Profession profession, Specialty specialty,
+//			//SecondarySkill secondary1, SecondarySkill secondary2, SpellBook spellBook, Creature[] startingTroops
+//            for (Hero hero : list) {
+//            	writer.write(Integer.toString(hero.getHeader().ordinal()));
+//            	writer.write(";");
+//            	writer.write(Integer.toString(hero.getGender().ordinal()));
+//            	writer.write(";");
+//            	writer.write(Integer.toString(hero.getRace().ordinal()));
+//            	writer.write(";");
+//            	writer.write(Integer.toString(hero.getProfession().ordinal()));
+//            	writer.write(";");
+//            	ByteBuffer buffer = hero.getSpecialty().getByteBuffer();
+//            	for (int i = 0; i < 7; i++) {
+//            		writer.write(Integer.toString(buffer.getInt()));
+//            		if (i == 6) {
+//            			writer.write(";");
+//            		} else {
+//            			writer.write(",");
+//            		}
+//            	}
+//            	writer.write(Integer.toString(hero.getSecondary1().getTrait().ordinal()));
+//            	writer.write(",");
+//            	writer.write(Integer.toString(hero.getSecondary1().getLevel().ordinal()));
+//            	writer.write(";");
+//            	writer.write(Integer.toString(hero.getSecondary2().getTrait().ordinal()));
+//            	writer.write(",");
+//            	writer.write(Integer.toString(hero.getSecondary2().getLevel().ordinal()));
+//            	writer.write(";");
+//            	writer.write(Integer.toString(hero.getSpellBook().getSpell().ordinal()));
+//            	writer.write(";");
+//            	for (int i = 0; i < 3; i++) {
+//            		writer.write(Integer.toString(hero.getStartingTroops()[i].ordinal()));
+//            		if (i == 2) {
+//            			writer.newLine();
+//            		} else {
+//            			writer.write(",");
+//            		}
+//            	}
+//            }
+//            writer.close();
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
+//    }
 }
+

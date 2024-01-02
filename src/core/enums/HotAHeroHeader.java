@@ -1,5 +1,6 @@
 package core.enums;
 
+@Deprecated
 public enum HotAHeroHeader {
 	CORKES("Corkes", 0x25E7, 0x264B),
 	JEREMY("Jeremy", 0x2885, 0x28E9),

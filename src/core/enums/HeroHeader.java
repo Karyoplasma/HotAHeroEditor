@@ -156,7 +156,49 @@ public enum HeroHeader {
 	ROLAND("Roland", 0x279BE0, 0x27D470),
 	MUTARE_DRAKE("Mutare Drake", 0x279C08, 0x27D4CC),
 	BORAGUS("Boragus", 0x279C30, 0x27D528),
-	XERON("Xeron", 0x279C58, 0x27D584);
+	XERON("Xeron", 0x279C58, 0x27D584),
+	CORKES("Corkes", 0x264B, 0x25E7),
+	JEREMY("Jeremy", 0x28E9, 0x2885),
+	ILLOR("Illor", 0x2BFB, 0x2B97),
+	DEREK("Derek", 0x2EDA, 0x2E76),
+	LEENA("Leena", 0x319D, 0x3139),
+	ANABEL("Anabel", 0x3475, 0x3411),
+	CASSIOPEIA("Cassiopeia", 0x374D, 0x36E9),
+	MIRIAM("Miriam", 0x3986, 0x3922),
+	CASMETRA("Casmetra", 0x3CD6, 0x3C72),
+	EOVACIUS("Eovacius", 0x3F85, 0x3F21),
+	SPINT("Spint", 0x422E, 0x41CA),
+	ANDAL("Andal", 0x4502, 0x449E),
+	MANFRED("Manfred", 0x47C9, 0x4765),
+	ZILARE("Zilare", 0x4A76, 0x4A12),
+	ASTRA("Astra", 0x4CFD, 0x4C99),
+	DARGEM("Dargem", 0x4FE5, 0x4F81),
+	BIDLEY("Bidley", 0x52B4, 0x5250),
+	TARK("Tark", 0x5587, 0x5523),
+	ELMORE("Elmore", 0x5802, 0x579E),
+	BEATRICE("Beatrice", 0x5A6E, 0x5A0A),
+	KINKERIA("Kinkeria", 0x5D0E, 0x5CAA),
+	RANLOO("Ranloo", 0x5FE8, 0x5F84),
+	GISELLE("Giselle", 0x6262, 0x61FE),
+	HENRIETTA("Henrietta", 0x658F, 0x652B),
+	SAM("Sam", 0x6886, 0x6822),
+	TANCRED("Tancred", 0x6BA3, 0x6B3F),
+	MELCHIOR("Melchior", 0x6E4E, 0x6DEA),
+	FLORIBERT("Floribert", 0x70B8, 0x7054),
+	WYNONA("Wynona", 0x7371, 0x730D),
+	DURY("Dury", 0x7622, 0x75BE),
+	MORTON("Morton", 0x78A6, 0x7842),
+	CELESTINE("Celestine", 0x7BF3, 0x7B8F),
+	TODD("Todd", 0x7F1B, 0x7EB7),
+	AGAR("Agar", 0x8220, 0x81BC),
+	BERTRAM("Bertram", 0x84A4, 0x8440),
+	WRATHMONT("Wrathmont", 0x8799, 0x8735),
+	ZIPH("Ziph", 0x8A53, 0x89EF),
+	VICTORIA("Victoria", 0x8D61, 0x8CFD),
+	EANSWYTHE("Eanswythe", 0x9079, 0x9015),
+	FREDERICK("Frederick", 0x936B, 0x9307),
+	TAVIN("Tavin", 0x9610, 0x95AC),
+	MURDOCH("Murdoch", 0x986F, 0x980B);
 	
 	private String name;
 	private long specialtyOffset, dataOffset;
@@ -173,6 +215,10 @@ public enum HeroHeader {
 
 	public long getDataOffset() {
 		return dataOffset;
+	}
+	
+	public boolean hotaOnly() {
+		return ordinal() > HeroHeader.XERON.ordinal();
 	}
 	
 	@Override

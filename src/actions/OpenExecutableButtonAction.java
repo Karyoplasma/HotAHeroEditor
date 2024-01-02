@@ -16,7 +16,7 @@ import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import core.H3ExecutableReader;
+import core.H3ExecutableHandler;
 import core.Hero;
 import gui.HotAHeroEditor;
 
@@ -109,7 +109,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 	private void readExecutable(Path executable, boolean isHotA) {
 		List<Hero> heroes = new ArrayList<Hero>();
 		try {
-			heroes = H3ExecutableReader.readHeroes(executable, isHotA);
+			heroes = H3ExecutableHandler.readHeroes(executable, isHotA);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(gui.getFrame(),
 					"Error reading heroes from the executable:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

@@ -9,6 +9,7 @@ import core.enums.Profession;
 import core.enums.Race;
 import core.specialties.Specialty;
 
+@Deprecated
 public class HotaHero extends Hero {
 
 	HotAHeroHeader header;

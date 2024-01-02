@@ -202,6 +202,11 @@ public enum Creature {
 	public String getPlural() {
 		return pluralName;
 	}
+	
+	public boolean hotaOnly() {
+		return ordinal() > Creature.ARROW_TOWER.ordinal();
+	}
+	
 	public static Creature getCreatureByBytes(int bytes) {
 		for (Creature creature : Creature.values()) {
 			if (creature.getBytes() == bytes) {
