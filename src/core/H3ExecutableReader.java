@@ -6,7 +6,9 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import core.enums.Creature;
@@ -26,8 +28,8 @@ public class H3ExecutableReader {
 
 	}
 
-	public static Map<String, Hero> readHeroes(Path executable, boolean isHotA) throws IOException {
-		Map<String, Hero> heroes = new LinkedHashMap<String, Hero>();
+	public static List<Hero> readHeroes(Path executable, boolean isHotA) throws IOException {
+		List<Hero> heroes = new ArrayList<Hero>();
 		FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.READ);
 
 		for (HeroHeader header : HeroHeader.values()) {
@@ -55,7 +57,7 @@ public class H3ExecutableReader {
 			}
 			Specialty specialty = SpecialtyFactory.createSpecialtyFromBuffer(bufferSpecialtyData);
 			Hero hero = new Hero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook, startingTroops, new HeroChange());
-			heroes.put(header.toString(), hero);
+			heroes.add(hero);
 
 		}
 		fileChannel.close();
@@ -88,7 +90,7 @@ public class H3ExecutableReader {
 				}
 				Specialty specialty = SpecialtyFactory.createSpecialtyFromBuffer(bufferSpecialtyData);
 				HotaHero hero = new HotaHero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook, startingTroops, new HeroChange());
-				heroes.put(header.toString(), hero);
+				heroes.add(hero);
 			}
 			fileChannelHotA.close();
 		}

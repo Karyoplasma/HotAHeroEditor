@@ -7,7 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -105,26 +107,26 @@ public class OpenExecutableButtonAction extends AbstractAction {
 	}
 
 	private void readExecutable(Path executable, boolean isHotA) {
-		Map<String, Hero> heroes = new LinkedHashMap<String, Hero>();
+		List<Hero> heroes = new ArrayList<Hero>();
 		try {
 			heroes = H3ExecutableReader.readHeroes(executable, isHotA);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(gui.getFrame(),
 					"Error reading heroes from the executable:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		if (heroes == null) {
-			JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(gui.getFrame(),
 					"This should never happen. If you see this message, please create an issue on GitHub.\nThe heroes list is null.",
 					"Fatal error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		if (!heroes.isEmpty()) {
 			System.out.println("Read " + heroes.size() + " heroes.");
-			for (Hero hero : heroes.values()) {
+			for (Hero hero : heroes) {
 				hero.debug();
 			}
-			gui.setHeroes(heroes);
+			gui.resetHeroes(heroes);
 		}
 	}
 }

@@ -9,7 +9,7 @@ public class HeroChange {
 	private SecondarySkill secondary1, secondary2;
 	private SpellBook spellBook;
 	private Creature[] startingTroops;
-	
+
 	public HeroChange() {
 		this.specialty = null;
 		this.secondary1 = null;
@@ -17,7 +17,7 @@ public class HeroChange {
 		this.spellBook = null;
 		this.startingTroops = null;
 	}
-	
+
 	public HeroChange(Specialty specialty, SecondarySkill secondary1, SecondarySkill secondary2, SpellBook spellBook,
 			Creature[] startingTroops) {
 		this.specialty = specialty;
@@ -30,6 +30,26 @@ public class HeroChange {
 	public boolean isChanged() {
 		return !((specialty == null) && (secondary1 == null) && (secondary2 == null) && (spellBook == null)
 				&& (startingTroops == null));
+	}
+
+	public int getAmountOfChanges() {
+		int count = 0;
+		if (!(specialty == null)) {
+			count++;
+		}
+		if (!(secondary1 == null)) {
+			count++;
+		}
+		if (!(secondary2 == null)) {
+			count++;
+		}
+		if (!(spellBook == null)) {
+			count++;
+		}
+		if (!(startingTroops == null)) {
+			count++;
+		}
+		return count;
 	}
 
 	public Specialty getSpecialty() {

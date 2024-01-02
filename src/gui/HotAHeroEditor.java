@@ -13,21 +13,27 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 import actions.OpenExecutableButtonAction;
 import core.Hero;
+import models.ChangesTableModel;
 
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 public class HotAHeroEditor {
 
-	private Map<String, Hero> heroes;
+	private List<Hero> heroes;
 	private JFrame frame;
 	private JTable tableEditor;
 	private JTable tableChanges;
@@ -68,6 +74,8 @@ public class HotAHeroEditor {
 	 */
 	private void initialize() {
 		this.initializeSaveDirectory();
+		this.heroes = new ArrayList<Hero>();
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,6 +107,7 @@ public class HotAHeroEditor {
 		tableEditor.setShowVerticalLines(false);
 		tableEditor.setShowHorizontalLines(false);
 		tableEditor.setFillsViewportHeight(true);
+
 		tableEditor.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		scrollPaneEditor.setViewportView(tableEditor);
 
@@ -113,6 +122,7 @@ public class HotAHeroEditor {
 		frame.getContentPane().add(scrollPaneChanges, "cell 0 3 5 1,grow");
 
 		tableChanges = new JTable();
+		//tableChanges.setModel(new ChangesTableModel(this));
 		tableChanges.setShowVerticalLines(false);
 		tableChanges.setShowHorizontalLines(false);
 		tableChanges.setShowGrid(false);
@@ -149,7 +159,7 @@ public class HotAHeroEditor {
 		return this.chckbxSaveDirectory.isSelected();
 	}
 
-	public Map<String, Hero> getHeroes() {
+	public List<Hero> getHeroes() {
 		return this.heroes;
 	}
 
@@ -172,9 +182,12 @@ public class HotAHeroEditor {
 	public void setIsHotA(boolean isHotA) {
 		this.isHotA = isHotA;
 	}
-	public void setHeroes(Map<String, Hero> heroes) {
-		this.heroes = heroes;
+	public void resetHeroes(List<Hero> heroes) {
+		this.heroes.clear();
+		this.heroes.addAll(heroes);
 		this.btnLoad.setEnabled(true);
 		// initialize tables
+		((ChangesTableModel) this.tableChanges.getModel()).initializeData();	
 	}
+
 }
