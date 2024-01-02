@@ -2,6 +2,7 @@ package core.specialties;
 
 import java.nio.ByteBuffer;
 
+import core.Specialty;
 import core.enums.SpecialtyType;
 
 public class FrederickSpecialty implements Specialty {

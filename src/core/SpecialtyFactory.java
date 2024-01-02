@@ -14,7 +14,6 @@ import core.specialties.DragonSpecialty;
 import core.specialties.FrederickSpecialty;
 import core.specialties.ResourceSpecialty;
 import core.specialties.SkillSpecialty;
-import core.specialties.Specialty;
 import core.specialties.SpellSpecialty;
 import core.specialties.StaticCreatureSpecialty;
 

@@ -17,7 +17,6 @@ import core.enums.Profession;
 import core.enums.Race;
 import core.enums.SkillLevel;
 import core.enums.Spell;
-import core.specialties.Specialty;
 
 public class H3ExecutableHandler {
 
@@ -84,7 +83,7 @@ public class H3ExecutableHandler {
 			startingTroops[i] = Creature.getCreatureByBytes(bufferHeroData.getInt());
 		}
 		Specialty specialty = SpecialtyFactory.createSpecialtyFromBuffer(bufferSpecialtyData);
-		Hero hero = new Hero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook, startingTroops, new HeroChange());
+		Hero hero = new Hero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook, startingTroops);
 		return hero;
 	}
 }

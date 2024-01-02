@@ -123,9 +123,6 @@ public class OpenExecutableButtonAction extends AbstractAction {
 		}
 		if (!heroes.isEmpty()) {
 			System.out.println("Read " + heroes.size() + " heroes.");
-			for (Hero hero : heroes) {
-				hero.debug();
-			}
 			gui.resetHeroes(heroes);
 		}
 	}

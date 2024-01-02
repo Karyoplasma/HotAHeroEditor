@@ -20,20 +20,12 @@ public class ChangesTableModel extends AbstractTableModel {
 	List<Hero> changedHeroes;
 	
 	HotAHeroEditor gui;
-	private String[] columnNames = { "Hero", "Stat", "Original", "Changes" };
+	private String[] columnNames = { "Hero", "Original", "Changes" };
 
 	public ChangesTableModel(HotAHeroEditor hotAHeroEditor) {
 		this.gui = hotAHeroEditor;
 		this.heroes = gui.getHeroes();
 		this.changedHeroes = new ArrayList<Hero>();
-		for (Hero hero : heroes) {
-			if (hero.getChange() == null) {
-				continue;
-			}
-			if (hero.getChange().isChanged()) {
-				changedHeroes.add(hero);
-			}
-		}
 	}
 
 	public void initializeData() {
@@ -44,16 +36,7 @@ public class ChangesTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		int count = 0;
-		for (Hero hero : heroes) {
-			if (hero.getChange() == null) {
-				continue;
-			}
-			if (hero.getChange().isChanged()) {
-				count += 5;
-			}
-		}
-		return count;
+		return changedHeroes.size() * 5;
 	}
 
 	@Override
@@ -101,9 +84,9 @@ public class ChangesTableModel extends AbstractTableModel {
 			case 0:
 				return hero.getSpecialty();
 			case 1:
-				return hero.getSecondary1();
+				return hero.getFirstSkill();
 			case 2:
-				return hero.getSecondary2();
+				return hero.getSecondSkill();
 			case 3:
 				return hero.getSpellBook();
 			case 4:

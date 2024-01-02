@@ -1,4 +1,4 @@
-package core.specialties;
+package core;
 
 import java.nio.ByteBuffer;
 import core.enums.SpecialtyType;

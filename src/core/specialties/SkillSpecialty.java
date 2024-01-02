@@ -2,6 +2,7 @@ package core.specialties;
 
 import java.nio.ByteBuffer;
 
+import core.Specialty;
 import core.enums.HeroTrait;
 import core.enums.SpecialtyType;
 
