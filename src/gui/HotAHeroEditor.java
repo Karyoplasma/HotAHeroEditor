@@ -1,10 +1,7 @@
 package gui;
 
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-
 import javax.swing.JFrame;
-
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,11 +15,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
-
 import actions.HeroComboBoxItemListener;
 import actions.HeroTraitComboBoxListener;
 import actions.OpenExecutableButtonAction;
@@ -130,19 +125,33 @@ public class HotAHeroEditor {
 		frame.getContentPane().add(comboBoxSpecialty, "cell 1 2,growx,aligny center");
 
 		specialtyCreatureAttack = new JSpinner(new SpinnerNumberModel());
+		specialtyCreatureAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyCreatureDefense = new JSpinner(new SpinnerNumberModel());
+		specialtyCreatureDefense.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyCreatureDamage = new JSpinner(new SpinnerNumberModel());
+		specialtyCreatureDamage.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyDragonAttack = new JSpinner(new SpinnerNumberModel());
+		specialtyDragonAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyDragonDefense = new JSpinner(new SpinnerNumberModel());
+		specialtyDragonDefense.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtySpeed = new JSpinner(new SpinnerNumberModel());
+		specialtySpeed.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyCreature = new JComboBox<Creature>();
+		specialtyCreature.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyCreatureStatic = new JComboBox<Creature>();
+		specialtyCreatureStatic.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyFirstConversion = new JComboBox<Creature>();
+		specialtyFirstConversion.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtySecondConversion = new JComboBox<Creature>();
+		specialtySecondConversion.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyConversionResult = new JComboBox<Creature>();
+		specialtyConversionResult.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyResources = new JComboBox<Resource>();
+		specialtyResources.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtySkill = new JComboBox<HeroTrait>();
+		specialtySkill.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtySpell = new JComboBox<Spell>();
+		specialtySpell.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelSpecialtyOptions = new JPanel();
 		panelSpecialtyOptions.setLayout(new CardLayout());
 		panelSpecialtyOptions.add(this.createEmptyPanel(), "Empty");
@@ -260,44 +269,66 @@ public class HotAHeroEditor {
 
 	private Component createCreatureSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.add(new JLabel("Creature"));
-		panel.add(specialtyCreature);
+		panel.setLayout(new MigLayout("", "[grow]", "[]"));
+		panel.add(specialtyCreature, "cell 0 0,growx,aligny top");
 		return panel;
 	}
 
 	private JPanel createSpellSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.add(specialtySpell);
+		panel.setLayout(new MigLayout("", "[grow]", "[]"));
+		panel.add(specialtySpell, "cell 0 0,growx,aligny top");
 		return panel;
 	}
 
 	private JPanel createCreatureConversionSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.add(specialtyFirstConversion);
-		panel.add(specialtySecondConversion);
-		panel.add(specialtyConversionResult);
+		panel.setLayout(new MigLayout("", "[grow][][grow][][grow]", "[]"));
+		JLabel lblOr = new JLabel("OR");
+		lblOr.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblOr, "cell 1 0,alignx center,aligny center");
+		JLabel lblTo = new JLabel("-->");
+		lblTo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblTo, "cell 3 0,alignx center,aligny center");
+		panel.add(specialtyFirstConversion, "cell 0 0,growx,aligny top");
+		panel.add(specialtySecondConversion, "cell 2 0,growx,aligny top");
+		panel.add(specialtyConversionResult, "cell 4 0,growx,aligny top");
 		return panel;
 	}
 
 	private JPanel createCreatureSpeedSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.add(specialtySpeed);
+		panel.setLayout(new MigLayout("", "[][grow]", "[]"));
+		JLabel lblSpeedBonus = new JLabel("Speed Bonus:");
+		lblSpeedBonus.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblSpeedBonus, "cell 0 0,alignx right,aligny top");
+		panel.add(specialtySpeed,"cell 1 0,growx,aligny top");
 		return panel;
 	}
 
 	private JPanel createStaticCreatureSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		panel.add(specialtyCreatureStatic);
-		panel.add(specialtyCreatureAttack);
-		panel.add(specialtyCreatureDefense);
-		panel.add(specialtyCreatureDamage);
+		panel.setLayout(new MigLayout("", "[grow][][grow][][grow][][grow]", "[]"));
+		JLabel lblAttack = new JLabel("Attack:");
+		lblAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblAttack, "cell 1 0,alignx right,aligny top");
+		JLabel lblDefense = new JLabel("Defense:");
+		lblDefense.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblDefense, "cell 3 0,alignx right,aligny top");
+		JLabel lblDamage = new JLabel("Damage:");
+		lblDamage.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblDamage, "cell 5 0,alignx right,aligny top");
+		panel.add(specialtyCreatureStatic, "cell 0 0,growx,aligny top");
+		panel.add(specialtyCreatureAttack, "cell 2 0,growx,aligny top");
+		panel.add(specialtyCreatureDefense, "cell 4 0,growx,aligny top");
+		panel.add(specialtyCreatureDamage, "cell 6 0,growx,aligny top");
 		return panel;
 	}
 
 	private JPanel createResourceSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.add(specialtyResources);
+		panel.setLayout(new MigLayout("", "[grow]", "[]"));
+		panel.add(specialtyResources, "cell 0 0,growx,aligny top");
 		return panel;
 	}
 
@@ -308,14 +339,22 @@ public class HotAHeroEditor {
 
 	private JPanel createDragonSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.add(specialtyDragonAttack);
-		panel.add(specialtyDragonDefense);
+		panel.setLayout(new MigLayout("", "[][grow][][grow]", "[]"));
+		JLabel lblAttack = new JLabel("Attack:");
+		lblAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblAttack, "cell 0 0,alignx right,aligny top");
+		JLabel lblNewLabel = new JLabel("Defense:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(lblNewLabel, "cell 2 0,alignx right,aligny top");
+		panel.add(specialtyDragonAttack, "cell 1 0,growx,aligny top");
+		panel.add(specialtyDragonDefense, "cell 3 0,growx,aligny top");
 		return panel;
 	}
 
 	private JPanel createSkillSpecialtyPanel() {
 		JPanel panel = new JPanel();
-		panel.add(specialtySkill);
+		panel.setLayout(new MigLayout("", "[grow]", "[]"));
+		panel.add(specialtySkill, "cell 0 0,growx,aligny top");
 		return panel;
 	}
 
