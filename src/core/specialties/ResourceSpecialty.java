@@ -14,10 +14,6 @@ public class ResourceSpecialty implements Specialty {
 		this.resource = resource;
 	}
 	
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
-	
 	public Resource getResource() {
 		return resource;
 	}

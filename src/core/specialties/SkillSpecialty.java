@@ -27,7 +27,11 @@ public class SkillSpecialty implements Specialty {
 		buffer.flip();
 		return buffer;
 	}
-
+	
+	public HeroTrait getSkill() {
+		return skill;
+	}
+	
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.SKILL_BONUS;

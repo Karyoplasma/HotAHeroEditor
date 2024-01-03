@@ -22,14 +22,13 @@ public class ChangesTableModel extends AbstractTableModel {
 	HotAHeroEditor gui;
 	private String[] columnNames = { "Hero", "Original", "Changes" };
 
-	public ChangesTableModel(HotAHeroEditor hotAHeroEditor) {
+	public ChangesTableModel(HotAHeroEditor hotAHeroEditor, List<Hero> heroes) {
 		this.gui = hotAHeroEditor;
-		this.heroes = gui.getHeroes();
+		this.heroes = heroes;
 		this.changedHeroes = new ArrayList<Hero>();
 	}
 
 	public void initializeData() {
-		this.heroes = gui.getHeroes();
 		fireTableStructureChanged();
 		this.resizeChangesColumnWidth();
 	}

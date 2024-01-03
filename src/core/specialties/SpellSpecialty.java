@@ -27,7 +27,11 @@ public class SpellSpecialty implements Specialty {
 		buffer.flip();
 		return buffer;
 	}
-
+	
+	public Spell getSpell() {
+		return spell;
+	}
+	
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.SPELL_BONUS;

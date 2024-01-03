@@ -26,7 +26,11 @@ public class CreatureSpeedSpecialty implements Specialty {
 		buffer.flip();
 		return buffer;
 	}
-
+	
+	public int getBonus() {
+		return bonus;
+	}
+	
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.CREATURE_BONUS_SPEED;

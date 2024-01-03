@@ -34,7 +34,18 @@ public class CreatureConversionSpecialty implements Specialty {
 		buffer.flip();
 		return buffer;
 	}
-
+	
+	public Creature getFirstAllowed() {
+		return allowed1;
+	}
+	
+	public Creature getSecondAllowed() {
+		return allowed2;
+	}
+	
+	public Creature getResult() {
+		return result;
+	}
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.CREATURE_CONVERSION;

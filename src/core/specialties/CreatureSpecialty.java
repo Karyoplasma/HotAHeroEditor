@@ -27,7 +27,11 @@ public class CreatureSpecialty implements Specialty {
 		buffer.flip();
 		return buffer;
 	}
-
+	
+	public Creature getCreature() {
+		return creature;
+	}
+	
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.CREATURE_BONUS_LEVEL;

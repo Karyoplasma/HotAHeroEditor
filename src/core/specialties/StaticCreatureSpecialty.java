@@ -31,7 +31,22 @@ public class StaticCreatureSpecialty implements Specialty {
 		buffer.flip();
 		return buffer;
 	}
-
+	
+	public Creature getCreature() {
+		return creature;
+	}
+	
+	public int getAttack() {
+		return attack;
+	}
+	
+	public int getDefense() {
+		return defense;
+	}
+	
+	public int getDamage() {
+		return damage;
+	}
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.CREATURE_BONUS_STATIC;

@@ -27,7 +27,14 @@ public class DragonSpecialty implements Specialty {
 		buffer.flip();
 		return buffer;
 	}
-
+	
+	public int getAttack() {
+		return attack;
+	}
+	
+	public int getDefense() {
+		return defense;
+	}
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.DRAGON_BONUS;
