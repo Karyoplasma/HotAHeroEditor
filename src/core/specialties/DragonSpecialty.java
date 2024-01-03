@@ -42,7 +42,7 @@ public class DragonSpecialty implements Specialty {
 
 	@Override
 	public String toString() {
-		return "Dragons";
+		return "Dragons +" + Integer.reverseBytes(attack) + "/+"+ Integer.reverseBytes(defense);
 	}
 	
 	@Override

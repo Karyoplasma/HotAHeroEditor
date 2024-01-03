@@ -54,7 +54,7 @@ public class StaticCreatureSpecialty implements Specialty {
 
 	@Override
 	public String toString() {
-		return String.format("%s +%d/%d/%d", this.creature.getPlural(), Integer.reverseBytes(this.attack),
+		return String.format("%s +%d/+%d/+%d", this.creature.getPlural(), Integer.reverseBytes(this.attack),
 				Integer.reverseBytes(this.defense), Integer.reverseBytes(this.damage));
 	}
 

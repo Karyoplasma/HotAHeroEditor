@@ -4,33 +4,96 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-
 import core.Hero;
 import gui.HotAHeroEditor;
 
 public class ChangesTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = -6106115281402023971L;
-	List<Hero> heroes;
 	List<Hero> changedHeroes;
-	
+
 	HotAHeroEditor gui;
-	private String[] columnNames = { "Hero", "Original", "Changes" };
+	private String[] columnNames = { "Hero", "Vanilla", "Changed" };
 
 	public ChangesTableModel(HotAHeroEditor hotAHeroEditor, List<Hero> heroes) {
 		this.gui = hotAHeroEditor;
-		this.heroes = heroes;
 		this.changedHeroes = new ArrayList<Hero>();
+		for (Hero hero : heroes) {
+			if (hero.isChanged(this.gui.getOriginalHero(hero.getName()))) {
+				this.changedHeroes.add(hero);
+			}
+		}
+		this.gui.getBtnLoad().setEnabled(true);
+		this.gui.getBtnChange().setEnabled(true);
+		if (!this.changedHeroes.isEmpty()) {
+			this.gui.getBtnSave().setEnabled(true);
+			this.gui.getBtnUnlock().setEnabled(true);
+			this.gui.getBtnDiscardAll().setEnabled(true);
+			this.resize();
+		}
 	}
 
-	public void initializeData() {
-		fireTableStructureChanged();
+	public void resize() {
 		this.resizeChangesColumnWidth();
+	}
+
+	public void discardAll() {
+		this.changedHeroes.clear();
+		this.gui.getBtnDiscardAll().setEnabled(false);
+		this.gui.getBtnSave().setEnabled(false);
+		this.gui.getBtnWrite().setEnabled(false);
+		this.gui.getBtnUnlock().setEnabled(true);
+		this.resize();
+	}
+
+	public List<Hero> getChanges() {
+		return this.changedHeroes;
+	}
+
+	public void proposeChange(Hero hero) {
+		Hero original = this.gui.getOriginalHero(hero.getName());
+		Hero currentChange = this.searchChangesFor(hero);
+		if (currentChange == null) {
+			if (hero.isChanged(original)) {
+				this.changedHeroes.add(hero);
+				this.gui.getBtnDiscardAll().setEnabled(true);
+				this.gui.getBtnSave().setEnabled(true);
+				this.gui.getBtnUnlock().setEnabled(true);
+				this.resize();
+				return;
+			} else {
+				return;
+			}
+		} else {
+			if (!hero.isChanged(original)) {
+				this.changedHeroes.remove(currentChange);
+				if (this.changedHeroes.isEmpty()) {
+					this.gui.getBtnDiscardAll().setEnabled(false);
+					this.gui.getBtnSave().setEnabled(false);
+					this.gui.getBtnWrite().setEnabled(false);
+					this.gui.getBtnUnlock().setEnabled(false);
+				}
+				this.resize();
+				return;
+			} else {
+				fireTableDataChanged();
+				this.resize();
+				return;
+			}
+		}
+	}
+
+	private Hero searchChangesFor(Hero hero) {
+		for (Hero changed : this.changedHeroes) {
+			if (changed.equals(hero)) {
+				return changed;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -55,7 +118,9 @@ public class ChangesTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Hero hero = heroes.get(rowIndex / 5);
+		Hero hero = this.changedHeroes.get(rowIndex / 5);
+		Hero original = this.gui.getOriginalHero(hero.getName());
+		String temp = "";
 		switch (columnIndex) {
 		case 0:
 			if ((rowIndex % 5) == 0) {
@@ -66,30 +131,32 @@ public class ChangesTableModel extends AbstractTableModel {
 		case 1:
 			switch (rowIndex % 5) {
 			case 0:
-				return "Specialty";
+				return original.getSpecialty().toString();
 			case 1:
-				return "First Skill";
+				return original.getFirstSkill().toString();
 			case 2:
-				return "Second Skill";
+				return original.getSecondSkill().toString();
 			case 3:
-				return "Spell Book";
+				return original.getSpellBook().toString();
 			case 4:
-				return "Starting troops";
+				temp = Arrays.toString(original.getStartingTroops());
+				return temp.substring(1, temp.length() - 1);
 			default:
 				return "";
 			}
 		case 2:
 			switch (rowIndex % 5) {
 			case 0:
-				return hero.getSpecialty();
+				return hero.getSpecialty().toString();
 			case 1:
-				return hero.getFirstSkill();
+				return hero.getFirstSkill().toString();
 			case 2:
-				return hero.getSecondSkill();
+				return hero.getSecondSkill().toString();
 			case 3:
-				return hero.getSpellBook();
+				return hero.getSpellBook().toString();
 			case 4:
-				return Arrays.toString(hero.getStartingTroops());
+				temp = Arrays.toString(hero.getStartingTroops());
+				return temp.substring(1, temp.length() - 1);
 			default:
 				return "";
 			}
@@ -97,7 +164,7 @@ public class ChangesTableModel extends AbstractTableModel {
 			return "";
 		}
 	}
-	
+
 	private void resizeChangesColumnWidth() {
 		JTable table = gui.getTableChanges();
 		final TableColumnModel columnModel = table.getColumnModel();
@@ -113,5 +180,4 @@ public class ChangesTableModel extends AbstractTableModel {
 			columnModel.getColumn(column).setPreferredWidth(width);
 		}
 	}
-	
 }

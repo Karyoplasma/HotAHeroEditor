@@ -53,7 +53,7 @@ public class CreatureConversionSpecialty implements Specialty {
 	
 	@Override
 	public String toString() {
-		return this.result.toString() + " conversion";
+		return this.allowed1.toString() + " or " + this.allowed2.toString() + " --> " + this.result.toString();
 	}
 	
 	@Override

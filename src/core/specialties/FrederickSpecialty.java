@@ -33,5 +33,9 @@ public class FrederickSpecialty implements Specialty {
 	public String toString() {
 		return SpecialtyType.FREDERICK_SPECIALTY.toString();
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof FrederickSpecialty);
+	}
 }

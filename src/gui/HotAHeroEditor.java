@@ -22,6 +22,7 @@ import actions.HeroComboBoxItemListener;
 import actions.HeroTraitComboBoxListener;
 import actions.OpenExecutableButtonAction;
 import actions.SpecialtyComboBoxListener;
+import actions.ChangeButtonAction;
 import core.Hero;
 import core.SecondarySkill;
 import core.Specialty;
@@ -89,8 +90,9 @@ public class HotAHeroEditor {
 		this.readOriginalHeroes();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 600);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[][][grow][][]", "[][][grow][][][][][grow][][][grow][]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[][][350px:n][grow][][]", "[][][][][][][][grow][][][grow][]"));
 
 		chckbxSaveDirectory = new JCheckBox("Save directory");
 		chckbxSaveDirectory.setSelected(true);
@@ -103,12 +105,12 @@ public class HotAHeroEditor {
 		btnUnlock = new JButton("Unlock");
 		btnUnlock.setEnabled(false);
 		btnUnlock.setFont(new Font("Tahoma", Font.BOLD, 14));
-		frame.getContentPane().add(btnUnlock, "cell 3 0,grow");
+		frame.getContentPane().add(btnUnlock, "cell 4 0,grow");
 
 		btnWrite = new JButton("Write");
 		btnWrite.setEnabled(false);
 		btnWrite.setFont(new Font("Tahoma", Font.BOLD, 14));
-		frame.getContentPane().add(btnWrite, "cell 4 0,grow");
+		frame.getContentPane().add(btnWrite, "cell 5 0,grow");
 
 		comboBoxHero = new JComboBox<Hero>();
 		comboBoxHero.setEnabled(false);
@@ -124,17 +126,17 @@ public class HotAHeroEditor {
 		comboBoxSpecialty.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frame.getContentPane().add(comboBoxSpecialty, "cell 1 2,growx,aligny center");
 
-		specialtyCreatureAttack = new JSpinner(new SpinnerNumberModel());
+		specialtyCreatureAttack = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
 		specialtyCreatureAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyCreatureDefense = new JSpinner(new SpinnerNumberModel());
+		specialtyCreatureDefense = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
 		specialtyCreatureDefense.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyCreatureDamage = new JSpinner(new SpinnerNumberModel());
+		specialtyCreatureDamage = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
 		specialtyCreatureDamage.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyDragonAttack = new JSpinner(new SpinnerNumberModel());
+		specialtyDragonAttack = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
 		specialtyDragonAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyDragonDefense = new JSpinner(new SpinnerNumberModel());
+		specialtyDragonDefense = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
 		specialtyDragonDefense.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtySpeed = new JSpinner(new SpinnerNumberModel());
+		specialtySpeed = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
 		specialtySpeed.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyCreature = new JComboBox<Creature>();
 		specialtyCreature.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -226,23 +228,22 @@ public class HotAHeroEditor {
 		comboBoxThirdTroop.setEnabled(false);
 		panelStartingTroops.add(comboBoxThirdTroop, BorderLayout.SOUTH);
 
-		btnChange = new JButton("Change");
+		btnChange = new JButton(new ChangeButtonAction(this));
 		btnChange.setEnabled(false);
 		btnChange.setFont(new Font("Tahoma", Font.BOLD, 14));
-		frame.getContentPane().add(btnChange, "cell 0 8 3 1,alignx center,growy");
+		frame.getContentPane().add(btnChange, "cell 0 8 4 1,alignx center,growy");
 
 		JPanel panelSeparator = new JPanel();
-		frame.getContentPane().add(panelSeparator, "cell 0 9 5 1,grow");
+		frame.getContentPane().add(panelSeparator, "cell 0 9 6 1,grow");
 		panelSeparator.setLayout(new BorderLayout(0, 0));
 
 		JSeparator separator = new JSeparator();
 		panelSeparator.add(separator, BorderLayout.CENTER);
 
 		JScrollPane scrollPaneChanges = new JScrollPane();
-		frame.getContentPane().add(scrollPaneChanges, "cell 0 10 5 1,grow");
+		frame.getContentPane().add(scrollPaneChanges, "cell 0 10 6 1,grow");
 
 		tableChanges = new JTable();
-		// tableChanges.setModel(new ChangesTableModel(this));
 		tableChanges.setShowVerticalLines(false);
 		tableChanges.setShowHorizontalLines(false);
 		tableChanges.setShowGrid(false);
@@ -263,7 +264,7 @@ public class HotAHeroEditor {
 		btnDiscardAll = new JButton("Discard All");
 		btnDiscardAll.setEnabled(false);
 		btnDiscardAll.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(btnDiscardAll, "cell 4 11");
+		frame.getContentPane().add(btnDiscardAll, "cell 5 11");
 
 	}
 
@@ -519,8 +520,6 @@ public class HotAHeroEditor {
 	}
 
 	public void resetHeroes(List<Hero> heroes) {
-		this.btnLoad.setEnabled(true);
-		this.btnChange.setEnabled(true);
 		// initialize components
 		this.comboBoxFirstSkillLevel.setModel(new SkillLevelComboBoxModel());
 		this.comboBoxFirstSkillLevel.setEnabled(true);
@@ -544,7 +543,7 @@ public class HotAHeroEditor {
 		this.specialtyConversionResult.setModel(new CreatureComboBoxModel(isHotA, false));
 		this.specialtyFirstConversion.setModel(new CreatureComboBoxModel(isHotA, false));
 		this.specialtySecondConversion.setModel(new CreatureComboBoxModel(isHotA, false));
-		this.specialtySpell.setModel(new SpellComboBoxModel());
+		this.specialtySpell.setModel(new SpellSpecialtyComboBoxModel());
 		this.specialtyResources.setModel(new ResourceComboBoxModel());
 		this.specialtySkill.setModel(new HeroTraitComboBoxModel(isHotA, false));
 		this.comboBoxSpecialty.setModel(new SpecialtyComboBoxModel(isHotA));
@@ -555,7 +554,7 @@ public class HotAHeroEditor {
 		this.comboBoxHero.setEnabled(true);
 		this.comboBoxHero.setSelectedItem(heroes.get(0));
 		// initialize table
-		// ((ChangesTableModel) this.tableChanges.getModel()).initializeData();
+		this.tableChanges.setModel(new ChangesTableModel(this, heroes));
 	}
 
 	public void readOriginalHeroes() {

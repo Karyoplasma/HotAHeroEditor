@@ -33,5 +33,9 @@ public class AdrienneSpecialty implements Specialty {
 	public String toString() {
 		return SpecialtyType.ADRIENNE_SPECIALTY.toString();
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof AdrienneSpecialty);
+	}
 }

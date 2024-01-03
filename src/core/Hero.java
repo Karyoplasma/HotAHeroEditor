@@ -107,23 +107,18 @@ public class Hero {
 	
 	public boolean isChanged(Hero originalHero) {
 		if (!this.getSpecialty().equals(originalHero.getSpecialty())) {
-			System.out.print("Specialty is different ");
 			return true;
 		}
 		if (!this.getFirstSkill().equals(originalHero.getFirstSkill())) {
-			System.out.print("First Skill is different ");
 			return true;
 		}
 		if (!this.getSecondSkill().equals(originalHero.getSecondSkill())) {
-			System.out.print("Second Skill is different ");
 			return true;
 		}
 		if (!this.getSpellBook().equals(originalHero.getSpellBook())) {
-			System.out.print("Spell is different ");
 			return true;
 		}
 		if (!Arrays.equals(this.getStartingTroops(), originalHero.getStartingTroops())) {
-			System.out.print("Starting Troops are different ");
 			return true;
 		}
 		return false;
