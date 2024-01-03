@@ -32,7 +32,23 @@ public class Hero {
 		this.spellBook = spellBook;
 		this.startingTroops = startingTroops;
 	}
-
+	
+	public Hero(Hero hero) {
+		this.header = hero.header;
+		this.firstSkill = new SecondarySkill(hero.getFirstSkill().getTrait(), hero.getFirstSkill().getLevel());
+		this.secondSkill = new SecondarySkill(hero.getSecondSkill().getTrait(), hero.getSecondSkill().getLevel());
+		this.specialty = SpecialtyFactory.createSpecialtyFromBuffer(hero.getSpecialty().getByteBuffer());
+		this.gender = hero.getGender();
+		this.race = hero.getRace();
+		this.profession = hero.getProfession();
+		this.spellBook = new SpellBook(hero.getSpellBook().getSpell());
+		Creature[] troops = new Creature[3];
+		for (int i = 0; i < 3; i++) {
+			troops[i] = hero.getStartingTroops()[i];
+		}
+		this.startingTroops = troops;
+	}
+	
 	public SecondarySkill getFirstSkill() {
 		return firstSkill;
 	}

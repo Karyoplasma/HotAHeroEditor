@@ -42,6 +42,14 @@ public class ChangesTableModel extends AbstractTableModel {
 	}
 
 	public void discardAll() {
+		for (Hero changed : this.changedHeroes) {
+			Hero heroOriginal = new Hero(this.gui.getOriginalHero(changed.getName()));
+			changed.setSpecialty(heroOriginal.getSpecialty());
+			changed.setFirstSkill(heroOriginal.getFirstSkill());
+			changed.setSecondSkill(heroOriginal.getSecondSkill());
+			changed.setSpellBook(heroOriginal.getSpellBook());
+			changed.setStartingTroops(heroOriginal.getStartingTroops());		
+		}
 		this.changedHeroes.clear();
 		this.gui.getBtnDiscardAll().setEnabled(false);
 		this.gui.getBtnSave().setEnabled(false);
