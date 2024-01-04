@@ -72,6 +72,11 @@ public class ChangesTableModel extends AbstractTableModel {
 			this.resize();
 			this.gui.getComboBoxHero().setSelectedItem(changedHeroes.get(0));
 			this.gui.getFrame().repaint();
+		} else {
+			this.gui.getBtnUnlock().setEnabled(false);
+			this.gui.getBtnDiscardAll().setEnabled(false);
+			this.gui.getBtnSave().setEnabled(false);
+			this.gui.getFrame().repaint();
 		}
 		return notLoaded;
 	}
