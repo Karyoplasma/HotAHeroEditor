@@ -30,6 +30,11 @@ public class FrederickSpecialty implements Specialty {
 	}
 	
 	@Override
+	public boolean isHotaOnly() {
+		return true;
+	}
+	
+	@Override
 	public String toString() {
 		return SpecialtyType.FREDERICK_SPECIALTY.toString();
 	}

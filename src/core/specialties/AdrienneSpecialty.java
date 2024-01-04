@@ -30,6 +30,11 @@ public class AdrienneSpecialty implements Specialty {
 	}
 	
 	@Override
+	public boolean isHotaOnly() {
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return SpecialtyType.ADRIENNE_SPECIALTY.toString();
 	}

@@ -38,6 +38,11 @@ public class ResourceSpecialty implements Specialty {
 	}
 	
 	@Override
+	public boolean isHotaOnly() {
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		switch (this.resource) {
 		case WOOD:

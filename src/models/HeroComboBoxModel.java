@@ -23,6 +23,9 @@ public class HeroComboBoxModel extends AbstractListModel<Hero> implements ComboB
 
 	@Override
 	public Hero getElementAt(int index) {
+		if (index < 0 || index >= heroList.size()) {
+			return null;
+		}
 		return heroList.get(index);
 	}
 

@@ -37,9 +37,15 @@ public class LoadButtonAction extends AbstractAction {
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		((ChangesTableModel) this.gui.getTableChanges().getModel()).loadChanges(changes);
-		JOptionPane.showMessageDialog(this.gui.getFrame(), String.format("%d changes loaded!", changes.size()),
-				"Success", JOptionPane.INFORMATION_MESSAGE);
+		int notLoaded = ((ChangesTableModel) this.gui.getTableChanges().getModel()).loadChanges(changes);
+		if (notLoaded == 0) {
+			JOptionPane.showMessageDialog(this.gui.getFrame(), String.format("%d changes loaded!", changes.size()),
+					"Success", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(this.gui.getFrame(), String.format(
+					"%d changes loaded!\n%d changes were inapplicable because the mod file contained HotA content.",
+					changes.size() - notLoaded, notLoaded), "Finished loading", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	private File getChangesFile() {

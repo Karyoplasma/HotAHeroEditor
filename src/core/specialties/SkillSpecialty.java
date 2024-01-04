@@ -38,6 +38,11 @@ public class SkillSpecialty implements Specialty {
 	}
 	
 	@Override
+	public boolean isHotaOnly() {
+		return skill == HeroTrait.INTERFERENCE;
+	}
+	
+	@Override
 	public String toString() {
 		return skill.toString();
 	}

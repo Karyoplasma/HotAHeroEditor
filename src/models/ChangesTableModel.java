@@ -34,6 +34,10 @@ public class ChangesTableModel extends AbstractTableModel {
 			this.gui.getBtnUnlock().setEnabled(true);
 			this.gui.getBtnDiscardAll().setEnabled(true);
 			this.resize();
+		} else {
+			this.gui.getBtnSave().setEnabled(false);
+			this.gui.getBtnUnlock().setEnabled(false);
+			this.gui.getBtnDiscardAll().setEnabled(false);
 		}
 	}
 
@@ -41,20 +45,35 @@ public class ChangesTableModel extends AbstractTableModel {
 		this.resizeChangesColumnWidth();
 	}
 	
-	public void loadChanges(List<Hero> changes) {
+	public int loadChanges(List<Hero> changes) {
+		int notLoaded = 0;
+		for (Hero changed : this.changedHeroes) {
+			Hero heroOriginal = new Hero(this.gui.getOriginalHero(changed.getName()));
+			changed.setSpecialty(heroOriginal.getSpecialty());
+			changed.setFirstSkill(heroOriginal.getFirstSkill());
+			changed.setSecondSkill(heroOriginal.getSecondSkill());
+			changed.setSpellBook(heroOriginal.getSpellBook());
+			changed.setStartingTroops(heroOriginal.getStartingTroops());		
+		}
 		this.changedHeroes.clear();
 		for (Hero hero : changes) {
-			Hero listedHero = this.gui.getComboBoxHero().getItemAt(hero.getHeader().ordinal());
-			listedHero.setTo(hero);
-			changedHeroes.add(listedHero);
+			if (hero.isHotaOnly() && !this.gui.isHotA()) {
+				notLoaded++;
+			} else {
+				Hero listedHero = this.gui.getComboBoxHero().getItemAt(hero.getHeader().ordinal());
+				listedHero.setTo(hero);
+				changedHeroes.add(listedHero);
+			}
 		}
-		this.gui.getBtnUnlock().setEnabled(true);
-		this.gui.getBtnDiscardAll().setEnabled(true);
-		this.gui.getBtnSave().setEnabled(true);
-		this.resize();
-		this.gui.getComboBoxHero().setSelectedIndex(-1);
-		this.gui.getComboBoxHero().setSelectedItem(changedHeroes.get(0));
-		this.gui.getFrame().repaint();
+		if (!changedHeroes.isEmpty()) {
+			this.gui.getBtnUnlock().setEnabled(true);
+			this.gui.getBtnDiscardAll().setEnabled(true);
+			this.gui.getBtnSave().setEnabled(true);
+			this.resize();
+			this.gui.getComboBoxHero().setSelectedItem(changedHeroes.get(0));
+			this.gui.getFrame().repaint();
+		}
+		return notLoaded;
 	}
 
 	public void discardAll() {

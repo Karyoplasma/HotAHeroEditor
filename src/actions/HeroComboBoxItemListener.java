@@ -82,18 +82,18 @@ public class HeroComboBoxItemListener implements ItemListener {
 				break;
 			case CREATURE_BONUS_STATIC:
 				this.gui.getSpecialtyCreatureAttack()
-						.setValue(((StaticCreatureSpecialty) hero.getSpecialty()).getAttack());
+						.setValue(Integer.reverseBytes(((StaticCreatureSpecialty) hero.getSpecialty()).getAttack()));
 				this.gui.getSpecialtyCreatureDefense()
-						.setValue(((StaticCreatureSpecialty) hero.getSpecialty()).getDefense());
+						.setValue(Integer.reverseBytes(((StaticCreatureSpecialty) hero.getSpecialty()).getDefense()));
 				this.gui.getSpecialtyCreatureDamage()
-						.setValue(((StaticCreatureSpecialty) hero.getSpecialty()).getDamage());
-				this.gui.getSpecialtyCreature()
+						.setValue(Integer.reverseBytes(((StaticCreatureSpecialty) hero.getSpecialty()).getDamage()));
+				this.gui.getSpecialtyCreatureStatic()
 						.setSelectedItem(((StaticCreatureSpecialty) hero.getSpecialty()).getCreature());
 				this.resetOthersToDefault(this.gui.getSpecialtyCreatureAttack(), this.gui.getSpecialtyCreatureDefense(),
 						this.gui.getSpecialtyCreatureDamage(), this.gui.getSpecialtyCreatureStatic());
 				break;
 			case CREATURE_BONUS_SPEED:
-				this.gui.getSpecialtySpeed().setValue(((CreatureSpeedSpecialty) hero.getSpecialty()).getBonus());
+				this.gui.getSpecialtySpeed().setValue(Integer.reverseBytes(((CreatureSpeedSpecialty) hero.getSpecialty()).getBonus()));
 				this.resetOthersToDefault(this.gui.getSpecialtySpeed());
 				break;
 			case CREATURE_CONVERSION:
@@ -107,8 +107,8 @@ public class HeroComboBoxItemListener implements ItemListener {
 						this.gui.getSpecialtySecondConversion(), this.gui.getSpecialtyConversionResult());
 				break;
 			case DRAGON_BONUS:
-				this.gui.getSpecialtyDragonAttack().setValue(((DragonSpecialty) hero.getSpecialty()).getAttack());
-				this.gui.getSpecialtyDragonDefense().setValue(((DragonSpecialty) hero.getSpecialty()).getDefense());
+				this.gui.getSpecialtyDragonAttack().setValue(Integer.reverseBytes(((DragonSpecialty) hero.getSpecialty()).getAttack()));
+				this.gui.getSpecialtyDragonDefense().setValue(Integer.reverseBytes(((DragonSpecialty) hero.getSpecialty()).getDefense()));
 				this.resetOthersToDefault(this.gui.getSpecialtyDragonAttack(), this.gui.getSpecialtyDragonDefense());
 				break;
 			default:

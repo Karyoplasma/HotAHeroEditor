@@ -38,6 +38,11 @@ public class SpellSpecialty implements Specialty {
 	}
 	
 	@Override
+	public boolean isHotaOnly() {
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return this.spell.toString();
 	}

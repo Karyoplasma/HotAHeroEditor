@@ -33,6 +33,11 @@ public class CreatureSpecialty implements Specialty {
 	}
 	
 	@Override
+	public boolean isHotaOnly() {
+		return creature.hotaOnly();
+	}
+	
+	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.CREATURE_BONUS_LEVEL;
 	}

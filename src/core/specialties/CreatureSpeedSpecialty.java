@@ -37,6 +37,11 @@ public class CreatureSpeedSpecialty implements Specialty {
 	}
 	
 	@Override
+	public boolean isHotaOnly() {
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return "Creature speed +" + Integer.reverseBytes(this.bonus);
 	}

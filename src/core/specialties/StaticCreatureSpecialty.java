@@ -51,7 +51,12 @@ public class StaticCreatureSpecialty implements Specialty {
 	public SpecialtyType getType() {
 		return SpecialtyType.CREATURE_BONUS_STATIC;
 	}
-
+	
+	@Override
+	public boolean isHotaOnly() {
+		return creature.hotaOnly();
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%s +%d/+%d/+%d", this.creature.getPlural(), Integer.reverseBytes(this.attack),

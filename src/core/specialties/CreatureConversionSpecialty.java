@@ -46,9 +46,15 @@ public class CreatureConversionSpecialty implements Specialty {
 	public Creature getResult() {
 		return result;
 	}
+	
 	@Override
 	public SpecialtyType getType() {
 		return SpecialtyType.CREATURE_CONVERSION;
+	}
+	
+	@Override
+	public boolean isHotaOnly() {
+		return allowed1.hotaOnly() || allowed2.hotaOnly() || result.hotaOnly();
 	}
 	
 	@Override

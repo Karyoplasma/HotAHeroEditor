@@ -6,6 +6,7 @@ import java.util.Arrays;
 import core.enums.Creature;
 import core.enums.Gender;
 import core.enums.HeroHeader;
+import core.enums.HeroTrait;
 import core.enums.Profession;
 import core.enums.Race;
 import core.enums.Spell;
@@ -122,6 +123,7 @@ public class Hero {
 	}
 
 	public void setTo(Hero hero) {
+		assert hero != null;
 		this.specialty = hero.specialty;
 		this.firstSkill = hero.firstSkill;
 		this.secondSkill = hero.secondSkill;
@@ -147,7 +149,28 @@ public class Hero {
 		}
 		return false;
 	}
-
+	
+	public boolean isHotaOnly() {
+		if (header.hotaOnly()) {
+			return true;
+		}
+		if (specialty.isHotaOnly()) {
+			return true;
+		}
+		if (firstSkill.getTrait() == HeroTrait.INTERFERENCE) {
+			return true;
+		}
+		if (secondSkill.getTrait() == HeroTrait.INTERFERENCE) {
+			return true;
+		}
+		for (int i = 0; i < 3; i++) {
+			if (startingTroops[i].hotaOnly()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public ByteBuffer getByteBuffer() {
 		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 9);
 
@@ -169,7 +192,8 @@ public class Hero {
 
 		return buffer;
 	}
-
+	
+	@Deprecated
 	public void debug() {
 		try {
 			System.out.println(String.format("%s (%s); %s, %s; %s, %s; %s, %s", header.toString(), specialty.toString(),
