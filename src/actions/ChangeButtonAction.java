@@ -68,7 +68,7 @@ public class ChangeButtonAction extends AbstractAction {
 		currentHero.setSecondSkill(secondSkill);
 		currentHero.setSpellBook(spellBook);
 		currentHero.setStartingTroops(startingTroops);
-
+		
 		((ChangesTableModel) this.gui.getTableChanges().getModel()).proposeChange(currentHero);
 	}
 
@@ -133,6 +133,11 @@ public class ChangeButtonAction extends AbstractAction {
 			if (result == null) {
 				JOptionPane.showMessageDialog(this.gui.getFrame(), "Select a creature to convert into!",
 						"No conversion target", JOptionPane.INFORMATION_MESSAGE);
+				break;
+			}
+			if (allowed1 == result || allowed2 == result || allowed1 == allowed2) {
+				JOptionPane.showMessageDialog(this.gui.getFrame(), "The creatures you've selected are not different!",
+						"Same creatures", JOptionPane.INFORMATION_MESSAGE);
 				break;
 			}
 			return new CreatureConversionSpecialty(allowed1, allowed2, result);

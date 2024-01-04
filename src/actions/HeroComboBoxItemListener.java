@@ -53,10 +53,10 @@ public class HeroComboBoxItemListener implements ItemListener {
 				return;
 			}
 			Hero hero = (Hero) gui.getComboBoxHero().getSelectedItem();
-			this.gui.getComboBoxFirstSkillLevel().setSelectedItem(hero.getFirstSkill().getLevel());
-			this.gui.getComboBoxSecondSkillLevel().setSelectedItem(hero.getSecondSkill().getLevel());
 			this.gui.getComboBoxFirstSkill().setSelectedItem(hero.getFirstSkill().getTrait());
 			this.gui.getComboBoxSecondSkill().setSelectedItem(hero.getSecondSkill().getTrait());
+			this.gui.getComboBoxFirstSkillLevel().setSelectedItem(hero.getFirstSkill().getLevel());
+			this.gui.getComboBoxSecondSkillLevel().setSelectedItem(hero.getSecondSkill().getLevel());			
 			this.gui.getComboBoxSpell().setSelectedItem(hero.getSpell());
 			this.gui.getComboBoxFirstTroop().setSelectedItem(hero.getStartingTroops()[0]);
 			this.gui.getComboBoxSecondTroop().setSelectedItem(hero.getStartingTroops()[1]);

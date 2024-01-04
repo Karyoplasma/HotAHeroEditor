@@ -70,7 +70,7 @@ public class ChangesTableModel extends AbstractTableModel {
 			this.gui.getBtnDiscardAll().setEnabled(true);
 			this.gui.getBtnSave().setEnabled(true);
 			this.resize();
-			this.gui.getComboBoxHero().setSelectedItem(changedHeroes.get(0));
+			this.gui.forceHeroBoxItemEventTrigger(changedHeroes.get(0));
 			this.gui.getFrame().repaint();
 		} else {
 			this.gui.getBtnUnlock().setEnabled(false);

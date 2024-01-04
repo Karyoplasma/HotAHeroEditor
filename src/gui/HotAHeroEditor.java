@@ -6,6 +6,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import java.awt.Font;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -526,6 +528,17 @@ public class HotAHeroEditor {
 	public void setSpecialtyOptionsPanel(JPanel specialtyOptions) {
 		this.panelSpecialtyOptions = specialtyOptions;
 		this.frmHommHeroEditor.repaint();
+	}
+	
+	public void forceHeroBoxItemEventTrigger(Hero hero) {
+		if (!comboBoxHero.getSelectedItem().equals(hero)) {
+			comboBoxHero.setSelectedItem(hero);
+			return;
+		}
+		ItemEvent event = new ItemEvent(comboBoxHero, ItemEvent.SELECTED, hero, ItemEvent.SELECTED);
+		for (ItemListener listener : comboBoxHero.getItemListeners()) {
+		    listener.itemStateChanged(event);
+		}
 	}
 	
 	public void resetHeroes(List<Hero> heroes) {
