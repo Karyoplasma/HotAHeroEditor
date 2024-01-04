@@ -8,9 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
@@ -36,6 +34,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		Path executable = this.getH3Executable();
 		if (executable != null) {
+			this.gui.setExecutable(executable);
 			this.readExecutable(executable, gui.isHotA());
 		}
 	}
@@ -85,7 +84,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 		if (saveDirectoyPreference && gui.savePathPreference()) {
 			this.saveDirectoryPreference(executable.toPath());
 		}
-
+		
 		return executable.toPath();
 
 	}

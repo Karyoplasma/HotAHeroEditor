@@ -9,34 +9,26 @@ import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
-import actions.HeroComboBoxItemListener;
-import actions.HeroTraitComboBoxListener;
-import actions.OpenExecutableButtonAction;
-import actions.SpecialtyComboBoxListener;
-import actions.ChangeButtonAction;
+import actions.*;
 import core.Hero;
-import core.SecondarySkill;
-import core.Specialty;
-import core.SpecialtyFactory;
-import core.SpellBook;
+import core.ModFileHandler;
 import core.enums.*;
 import models.*;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import java.awt.BorderLayout;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 
@@ -45,7 +37,7 @@ public class HotAHeroEditor {
 	private Path saveDirectory;
 	private boolean isHotA;
 	private Map<String, Hero> originalHeroes;
-	private JFrame frame;
+	private JFrame frmHommHeroEditor;
 	private JCheckBox chckbxSaveDirectory;
 	private JButton btnSave, btnLoad, btnDiscardAll, btnUnlock, btnWrite, btnChange;
 	private JTable tableChanges;
@@ -61,13 +53,14 @@ public class HotAHeroEditor {
 	private JComboBox<Hero> comboBoxHero;
 	private JComboBox<SpecialtyType> comboBoxSpecialty;
 	private JComboBox<SkillLevel> comboBoxFirstSkillLevel, comboBoxSecondSkillLevel;
+	private Path executable;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					HotAHeroEditor window = new HotAHeroEditor();
-					window.frame.setVisible(true);
+					window.frmHommHeroEditor.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -87,56 +80,63 @@ public class HotAHeroEditor {
 	 */
 	private void initialize() {
 		this.initializeSaveDirectory();
-		this.readOriginalHeroes();
-		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 600);
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[][][350px:n][grow][][]", "[][][][][][][][grow][][][grow][]"));
+		this.originalHeroes = ModFileHandler.readOriginalHeroes();
+		if (this.originalHeroes == null) {
+			JOptionPane.showMessageDialog(null,
+					"There was an error while reading the original heroes.\nPlease restart the program to fix this issue!",
+					"Fatal Error", JOptionPane.ERROR_MESSAGE);
+		}
+		frmHommHeroEditor = new JFrame();
+		frmHommHeroEditor.setTitle("HoMM3 Hero Editor");
+		frmHommHeroEditor.setBounds(100, 100, 800, 600);
+		frmHommHeroEditor.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frmHommHeroEditor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmHommHeroEditor.getContentPane()
+				.setLayout(new MigLayout("", "[][][350px:n][grow][][]", "[][][][][][][][grow][][][grow][]"));
 
 		chckbxSaveDirectory = new JCheckBox("Save directory");
 		chckbxSaveDirectory.setSelected(true);
-		frame.getContentPane().add(chckbxSaveDirectory, "cell 1 0,grow");
+		frmHommHeroEditor.getContentPane().add(chckbxSaveDirectory, "cell 1 0,grow");
 
 		JButton btnOpenExecutable = new JButton(new OpenExecutableButtonAction(saveDirectory, this));
 		btnOpenExecutable.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(btnOpenExecutable, "cell 0 0,grow");
+		frmHommHeroEditor.getContentPane().add(btnOpenExecutable, "cell 0 0,grow");
 
-		btnUnlock = new JButton("Unlock");
+		btnUnlock = new JButton(new UnlockButtonAction(this));
 		btnUnlock.setEnabled(false);
 		btnUnlock.setFont(new Font("Tahoma", Font.BOLD, 14));
-		frame.getContentPane().add(btnUnlock, "cell 4 0,grow");
+		frmHommHeroEditor.getContentPane().add(btnUnlock, "cell 4 0,grow");
 
-		btnWrite = new JButton("Write");
+		btnWrite = new JButton(new WriteButtonAction(this));
 		btnWrite.setEnabled(false);
 		btnWrite.setFont(new Font("Tahoma", Font.BOLD, 14));
-		frame.getContentPane().add(btnWrite, "cell 5 0,grow");
+		frmHommHeroEditor.getContentPane().add(btnWrite, "cell 5 0,grow");
 
 		comboBoxHero = new JComboBox<Hero>();
 		comboBoxHero.setEnabled(false);
 		comboBoxHero.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(comboBoxHero, "cell 0 1,grow");
+		frmHommHeroEditor.getContentPane().add(comboBoxHero, "cell 0 1,grow");
 
 		JLabel lblSpecialty = new JLabel("Specialty:");
 		lblSpecialty.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(lblSpecialty, "cell 0 2,alignx trailing,growy");
+		frmHommHeroEditor.getContentPane().add(lblSpecialty, "cell 0 2,alignx trailing,growy");
 
 		comboBoxSpecialty = new JComboBox<SpecialtyType>();
 		comboBoxSpecialty.setEnabled(false);
 		comboBoxSpecialty.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(comboBoxSpecialty, "cell 1 2,growx,aligny center");
+		frmHommHeroEditor.getContentPane().add(comboBoxSpecialty, "cell 1 2,growx,aligny center");
 
-		specialtyCreatureAttack = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
+		specialtyCreatureAttack = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		specialtyCreatureAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyCreatureDefense = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
+		specialtyCreatureDefense = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		specialtyCreatureDefense.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyCreatureDamage = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
+		specialtyCreatureDamage = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		specialtyCreatureDamage.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyDragonAttack = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
+		specialtyDragonAttack = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		specialtyDragonAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtyDragonDefense = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
+		specialtyDragonDefense = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		specialtyDragonDefense.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		specialtySpeed = new JSpinner(new SpinnerNumberModel(0,0, Integer.MAX_VALUE, 1));
+		specialtySpeed = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		specialtySpeed.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyCreature = new JComboBox<Creature>();
 		specialtyCreature.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -165,83 +165,83 @@ public class HotAHeroEditor {
 		panelSpecialtyOptions.add(this.createCreatureSpeedSpecialtyPanel(), "Speed");
 		panelSpecialtyOptions.add(this.createCreatureConversionSpecialtyPanel(), "Conversion");
 		panelSpecialtyOptions.add(this.createDragonSpecialtyPanel(), "Dragon");
-		frame.getContentPane().add(panelSpecialtyOptions, "cell 1 3 2 1,grow");
+		frmHommHeroEditor.getContentPane().add(panelSpecialtyOptions, "cell 1 3 2 1,grow");
 
 		JLabel lblFirstSkill = new JLabel("First Skill:");
 		lblFirstSkill.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblFirstSkill.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(lblFirstSkill, "cell 0 4,alignx trailing,growy");
+		frmHommHeroEditor.getContentPane().add(lblFirstSkill, "cell 0 4,alignx trailing,growy");
 
 		comboBoxFirstSkillLevel = new JComboBox<SkillLevel>();
 		comboBoxFirstSkillLevel.setEnabled(false);
 		comboBoxFirstSkillLevel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(comboBoxFirstSkillLevel, "cell 1 4,growx,aligny center");
+		frmHommHeroEditor.getContentPane().add(comboBoxFirstSkillLevel, "cell 1 4,growx,aligny center");
 
 		comboBoxFirstSkill = new JComboBox<HeroTrait>();
 		comboBoxFirstSkill.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxFirstSkill.setEnabled(false);
-		frame.getContentPane().add(comboBoxFirstSkill, "cell 2 4,growx,aligny center");
+		frmHommHeroEditor.getContentPane().add(comboBoxFirstSkill, "cell 2 4,growx,aligny center");
 
 		JLabel lblSecondSkill = new JLabel("Second Skill:");
 		lblSecondSkill.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(lblSecondSkill, "cell 0 5,alignx trailing,growy");
+		frmHommHeroEditor.getContentPane().add(lblSecondSkill, "cell 0 5,alignx trailing,growy");
 
 		comboBoxSecondSkillLevel = new JComboBox<SkillLevel>();
 		comboBoxSecondSkillLevel.setEnabled(false);
 		comboBoxSecondSkillLevel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(comboBoxSecondSkillLevel, "cell 1 5,growx,aligny center");
+		frmHommHeroEditor.getContentPane().add(comboBoxSecondSkillLevel, "cell 1 5,growx,aligny center");
 
 		comboBoxSecondSkill = new JComboBox<HeroTrait>();
 		comboBoxSecondSkill.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxSecondSkill.setEnabled(false);
-		frame.getContentPane().add(comboBoxSecondSkill, "cell 2 5,growx,aligny center");
+		frmHommHeroEditor.getContentPane().add(comboBoxSecondSkill, "cell 2 5,growx,aligny center");
 
 		JLabel lblStartingSpell = new JLabel("Starting Spell:");
 		lblStartingSpell.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(lblStartingSpell, "cell 0 6,alignx trailing,growy");
+		frmHommHeroEditor.getContentPane().add(lblStartingSpell, "cell 0 6,alignx trailing,growy");
 
 		comboBoxSpell = new JComboBox<Spell>();
 		comboBoxSpell.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxSpell.setEnabled(false);
-		frame.getContentPane().add(comboBoxSpell, "cell 1 6,growx,aligny center");
+		frmHommHeroEditor.getContentPane().add(comboBoxSpell, "cell 1 6,growx,aligny center");
 
 		JLabel lblStartingTroops = new JLabel("Starting Troops:");
 		lblStartingTroops.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(lblStartingTroops, "cell 0 7,alignx trailing,growy");
+		frmHommHeroEditor.getContentPane().add(lblStartingTroops, "cell 0 7,alignx trailing,aligny center");
 
 		JPanel panelStartingTroops = new JPanel();
-		frame.getContentPane().add(panelStartingTroops, "cell 1 7 2 1,grow");
-		panelStartingTroops.setLayout(new BorderLayout());
+		frmHommHeroEditor.getContentPane().add(panelStartingTroops, "cell 1 7 2 1,growx,aligny center");
+		panelStartingTroops.setLayout(new MigLayout("", "[grow]", "[][][]"));
 
 		comboBoxFirstTroop = new JComboBox<Creature>();
 		comboBoxFirstTroop.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxFirstTroop.setEnabled(false);
-		panelStartingTroops.add(comboBoxFirstTroop, BorderLayout.NORTH);
+		panelStartingTroops.add(comboBoxFirstTroop, "cell 0 0 1 1,grow");
 
 		comboBoxSecondTroop = new JComboBox<Creature>();
 		comboBoxSecondTroop.setEnabled(false);
 		comboBoxSecondTroop.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panelStartingTroops.add(comboBoxSecondTroop, BorderLayout.CENTER);
+		panelStartingTroops.add(comboBoxSecondTroop, "cell 0 1 1 1,grow");
 
 		comboBoxThirdTroop = new JComboBox<Creature>();
 		comboBoxThirdTroop.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxThirdTroop.setEnabled(false);
-		panelStartingTroops.add(comboBoxThirdTroop, BorderLayout.SOUTH);
+		panelStartingTroops.add(comboBoxThirdTroop, "cell 0 2 1 1,grow");
 
 		btnChange = new JButton(new ChangeButtonAction(this));
 		btnChange.setEnabled(false);
 		btnChange.setFont(new Font("Tahoma", Font.BOLD, 14));
-		frame.getContentPane().add(btnChange, "cell 0 8 4 1,alignx center,growy");
+		frmHommHeroEditor.getContentPane().add(btnChange, "cell 0 8 4 1,alignx center,growy");
 
 		JPanel panelSeparator = new JPanel();
-		frame.getContentPane().add(panelSeparator, "cell 0 9 6 1,grow");
+		frmHommHeroEditor.getContentPane().add(panelSeparator, "cell 0 9 6 1,grow");
 		panelSeparator.setLayout(new BorderLayout(0, 0));
 
 		JSeparator separator = new JSeparator();
 		panelSeparator.add(separator, BorderLayout.CENTER);
 
 		JScrollPane scrollPaneChanges = new JScrollPane();
-		frame.getContentPane().add(scrollPaneChanges, "cell 0 10 6 1,grow");
+		frmHommHeroEditor.getContentPane().add(scrollPaneChanges, "cell 0 10 6 1,grow");
 
 		tableChanges = new JTable();
 		tableChanges.setShowVerticalLines(false);
@@ -251,20 +251,20 @@ public class HotAHeroEditor {
 		tableChanges.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		scrollPaneChanges.setViewportView(tableChanges);
 
-		btnLoad = new JButton("load");
+		btnLoad = new JButton(new LoadButtonAction(this));
 		btnLoad.setEnabled(false);
 		btnLoad.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(btnLoad, "cell 0 11,grow");
+		frmHommHeroEditor.getContentPane().add(btnLoad, "cell 0 11,grow");
 
-		btnSave = new JButton("save");
+		btnSave = new JButton(new SaveButtonAction(this));
 		btnSave.setEnabled(false);
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(btnSave, "cell 1 11,grow");
+		frmHommHeroEditor.getContentPane().add(btnSave, "cell 1 11,grow");
 
-		btnDiscardAll = new JButton("Discard All");
+		btnDiscardAll = new JButton(new DiscardAllButtonAction(this));
 		btnDiscardAll.setEnabled(false);
 		btnDiscardAll.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		frame.getContentPane().add(btnDiscardAll, "cell 5 11");
+		frmHommHeroEditor.getContentPane().add(btnDiscardAll, "cell 5 11");
 
 	}
 
@@ -303,7 +303,7 @@ public class HotAHeroEditor {
 		JLabel lblSpeedBonus = new JLabel("Speed Bonus:");
 		lblSpeedBonus.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(lblSpeedBonus, "cell 0 0,alignx right,aligny top");
-		panel.add(specialtySpeed,"cell 1 0,growx,aligny top");
+		panel.add(specialtySpeed, "cell 1 0,growx,aligny top");
 		return panel;
 	}
 
@@ -373,7 +373,7 @@ public class HotAHeroEditor {
 	}
 
 	public JFrame getFrame() {
-		return this.frame;
+		return this.frmHommHeroEditor;
 	}
 
 	public JButton getBtnSave() {
@@ -443,7 +443,7 @@ public class HotAHeroEditor {
 	public JComboBox<Resource> getSpecialtyResources() {
 		return specialtyResources;
 	}
-	
+
 	public JSpinner getSpecialtyCreatureAttack() {
 		return specialtyCreatureAttack;
 	}
@@ -455,13 +455,15 @@ public class HotAHeroEditor {
 	public JSpinner getSpecialtyCreatureDamage() {
 		return specialtyCreatureDamage;
 	}
-	
+
 	public JSpinner getSpecialtyDragonAttack() {
 		return specialtyDragonAttack;
 	}
+
 	public JSpinner getSpecialtyDragonDefense() {
 		return specialtyDragonDefense;
 	}
+
 	public JSpinner getSpecialtySpeed() {
 		return specialtySpeed;
 	}
@@ -489,11 +491,11 @@ public class HotAHeroEditor {
 	public JComboBox<Creature> getSpecialtyConversionResult() {
 		return specialtyConversionResult;
 	}
-	
-	public JComboBox<Creature> getSpecialtyCreatureStatic(){
+
+	public JComboBox<Creature> getSpecialtyCreatureStatic() {
 		return specialtyCreatureStatic;
 	}
-	
+
 	public JTable getTableChanges() {
 		return tableChanges;
 	}
@@ -502,6 +504,9 @@ public class HotAHeroEditor {
 		return panelSpecialtyOptions;
 	}
 
+	public Path getExecutable() {
+		return this.executable;
+	}
 	public boolean isHotA() {
 		return isHotA;
 	}
@@ -513,12 +518,16 @@ public class HotAHeroEditor {
 	public void setIsHotA(boolean isHotA) {
 		this.isHotA = isHotA;
 	}
-
+	
+	public void setExecutable(Path executable) {
+		this.executable = executable;
+	}
+	
 	public void setSpecialtyOptionsPanel(JPanel specialtyOptions) {
 		this.panelSpecialtyOptions = specialtyOptions;
-		this.frame.repaint();
+		this.frmHommHeroEditor.repaint();
 	}
-
+	
 	public void resetHeroes(List<Hero> heroes) {
 		// initialize components
 		this.comboBoxFirstSkillLevel.setModel(new SkillLevelComboBoxModel());
@@ -553,98 +562,7 @@ public class HotAHeroEditor {
 		this.comboBoxHero.addItemListener(new HeroComboBoxItemListener(this));
 		this.comboBoxHero.setEnabled(true);
 		this.comboBoxHero.setSelectedItem(heroes.get(0));
-		// initialize table
+
 		this.tableChanges.setModel(new ChangesTableModel(this, heroes));
 	}
-
-	public void readOriginalHeroes() {
-		this.originalHeroes = new HashMap<String, Hero>();
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("resources/originalHeroes"));
-			String in;
-			while ((in = reader.readLine()) != null) {
-				String[] inSplit = in.split(";");
-				HeroHeader header = HeroHeader.values()[Integer.parseInt(inSplit[0])];
-				Gender gender = Gender.values()[Integer.parseInt(inSplit[1])];
-				Race race = Race.values()[Integer.parseInt(inSplit[2])];
-				Profession profession = Profession.values()[Integer.parseInt(inSplit[3])];
-				ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 7);
-				String[] specialtyArr = inSplit[4].split(",");
-				for (int i = 0; i < 7; i++) {
-					buffer.putInt(Integer.parseInt(specialtyArr[i]));
-				}
-				buffer.flip();
-				Specialty specialty = SpecialtyFactory.createSpecialtyFromBuffer(buffer);
-				String[] secondaryArr = inSplit[5].split(",");
-				SecondarySkill secondary1 = new SecondarySkill(HeroTrait.values()[Integer.parseInt(secondaryArr[0])],
-						SkillLevel.values()[Integer.parseInt(secondaryArr[1])]);
-				secondaryArr = inSplit[6].split(",");
-				SecondarySkill secondary2 = new SecondarySkill(HeroTrait.values()[Integer.parseInt(secondaryArr[0])],
-						SkillLevel.values()[Integer.parseInt(secondaryArr[1])]);
-				SpellBook spellBook = new SpellBook(Spell.values()[Integer.parseInt(inSplit[7])]);
-				String[] troopsArr = inSplit[8].split(",");
-				Creature[] startingTroops = new Creature[3];
-				for (int i = 0; i < 3; i++) {
-					startingTroops[i] = Creature.values()[Integer.parseInt(troopsArr[i])];
-				}
-				Hero hero = new Hero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook,
-						startingTroops);
-				this.originalHeroes.put(header.toString(), hero);
-				if (hero.isChanged(hero)) {
-					hero.debug();
-				}
-			}
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-//	public static void writeListToDisk(List<Hero> list) {
-//        try {
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("resources/originalHeroes"));
-//            //HeroHeader header, Gender gender, Race race, Profession profession, Specialty specialty,
-//			//SecondarySkill secondary1, SecondarySkill secondary2, SpellBook spellBook, Creature[] startingTroops
-//            for (Hero hero : list) {
-//            	writer.write(Integer.toString(hero.getHeader().ordinal()));
-//            	writer.write(";");
-//            	writer.write(Integer.toString(hero.getGender().ordinal()));
-//            	writer.write(";");
-//            	writer.write(Integer.toString(hero.getRace().ordinal()));
-//            	writer.write(";");
-//            	writer.write(Integer.toString(hero.getProfession().ordinal()));
-//            	writer.write(";");
-//            	ByteBuffer buffer = hero.getSpecialty().getByteBuffer();
-//            	for (int i = 0; i < 7; i++) {
-//            		writer.write(Integer.toString(buffer.getInt()));
-//            		if (i == 6) {
-//            			writer.write(";");
-//            		} else {
-//            			writer.write(",");
-//            		}
-//            	}
-//            	writer.write(Integer.toString(hero.getSecondary1().getTrait().ordinal()));
-//            	writer.write(",");
-//            	writer.write(Integer.toString(hero.getSecondary1().getLevel().ordinal()));
-//            	writer.write(";");
-//            	writer.write(Integer.toString(hero.getSecondary2().getTrait().ordinal()));
-//            	writer.write(",");
-//            	writer.write(Integer.toString(hero.getSecondary2().getLevel().ordinal()));
-//            	writer.write(";");
-//            	writer.write(Integer.toString(hero.getSpellBook().getSpell().ordinal()));
-//            	writer.write(";");
-//            	for (int i = 0; i < 3; i++) {
-//            		writer.write(Integer.toString(hero.getStartingTroops()[i].ordinal()));
-//            		if (i == 2) {
-//            			writer.newLine();
-//            		} else {
-//            			writer.write(",");
-//            		}
-//            	}
-//            }
-//            writer.close();
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        }
-//    }
 }

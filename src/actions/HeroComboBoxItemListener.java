@@ -49,6 +49,9 @@ public class HeroComboBoxItemListener implements ItemListener {
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
+			if (gui.getComboBoxHero().getSelectedIndex() == -1) {
+				return;
+			}
 			Hero hero = (Hero) gui.getComboBoxHero().getSelectedItem();
 			this.gui.getComboBoxFirstSkillLevel().setSelectedItem(hero.getFirstSkill().getLevel());
 			this.gui.getComboBoxSecondSkillLevel().setSelectedItem(hero.getSecondSkill().getLevel());

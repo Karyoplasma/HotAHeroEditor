@@ -1,14 +1,16 @@
 package core;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
 import core.enums.Creature;
 import core.enums.Gender;
 import core.enums.HeroHeader;
@@ -85,5 +87,63 @@ public class H3ExecutableHandler {
 		Specialty specialty = SpecialtyFactory.createSpecialtyFromBuffer(bufferSpecialtyData);
 		Hero hero = new Hero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook, startingTroops);
 		return hero;
+	}
+	
+	public static int createBackup(Path executable) {
+		File parentDirectory = executable.getParent().toFile();
+		File backupFolder = new File(parentDirectory, "backupHeroModder");
+		if (!backupFolder.exists() && !backupFolder.mkdir()) {
+			return 1;
+		}
+		File backupFile = new File(backupFolder, executable.toFile().getName() + "_" + Instant.now().getEpochSecond());
+		try {
+			Path destinationPath = backupFile.toPath();
+			Files.copy(executable, destinationPath);
+			return 0;
+		} catch (IOException e) {
+			return 2;
+		}
+	}
+
+	public static int writeAllChanges(List<Hero> changes, Path executable) {
+		if (executable == null) {
+			return 1;
+		}
+		if (!executable.toFile().exists()) {
+			return 2;
+		}
+		if (executable.toFile().isDirectory()) {
+			return 3;
+		}
+		try {
+			FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.WRITE);
+			Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
+			FileChannel hotaChannel = FileChannel.open(hotaDAT, StandardOpenOption.WRITE);
+			
+			for (Hero hero : changes) {
+				if (hero.getHeader().hotaOnly()) {
+					long hotaDataOffset = hero.getDataOffset() + 0xC;
+					long hotaSpecialtyOffset = hero.getSpecialtyOffset();
+					ByteBuffer hotaHeroData = hero.getByteBuffer();
+					ByteBuffer hotaSpecialtyData = hero.getSpecialty().getByteBuffer();
+					hotaChannel.write(hotaSpecialtyData, hotaSpecialtyOffset);
+					hotaChannel.write(hotaHeroData, hotaDataOffset);
+				} else {
+					long dataOffset = hero.getDataOffset() + 0xC;
+					long specialtyOffset = hero.getSpecialtyOffset();
+					ByteBuffer heroData = hero.getByteBuffer();
+					ByteBuffer specialtyData = hero.getSpecialty().getByteBuffer();
+					fileChannel.write(specialtyData, specialtyOffset);
+					fileChannel.write(heroData, dataOffset);
+				}
+			}
+			fileChannel.close();
+			hotaChannel.close();
+			return 0;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 4;
+		}
+		
 	}
 }

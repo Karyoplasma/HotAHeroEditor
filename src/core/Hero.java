@@ -19,7 +19,7 @@ public class Hero {
 	private Specialty specialty;
 	private SpellBook spellBook;
 	private Creature[] startingTroops;
-	
+
 	public Hero(HeroHeader header, Gender gender, Race race, Profession profession, Specialty specialty,
 			SecondarySkill firstSkill, SecondarySkill secondSkill, SpellBook spellBook, Creature[] startingTroops) {
 		this.header = header;
@@ -32,7 +32,7 @@ public class Hero {
 		this.spellBook = spellBook;
 		this.startingTroops = startingTroops;
 	}
-	
+
 	public Hero(Hero hero) {
 		this.header = hero.header;
 		this.firstSkill = new SecondarySkill(hero.getFirstSkill().getTrait(), hero.getFirstSkill().getLevel());
@@ -48,7 +48,7 @@ public class Hero {
 		}
 		this.startingTroops = troops;
 	}
-	
+
 	public SecondarySkill getFirstSkill() {
 		return firstSkill;
 	}
@@ -100,27 +100,35 @@ public class Hero {
 	public Race getRace() {
 		return race;
 	}
-	
+
 	public void setSpecialty(Specialty specialty) {
 		this.specialty = specialty;
 	}
-	
+
 	public void setFirstSkill(SecondarySkill firstSkill) {
 		this.firstSkill = firstSkill;
 	}
-	
+
 	public void setSecondSkill(SecondarySkill secondSkill) {
 		this.secondSkill = secondSkill;
 	}
-	
+
 	public void setSpellBook(SpellBook spellBook) {
 		this.spellBook = spellBook;
 	}
-	
+
 	public void setStartingTroops(Creature[] startingTroops) {
 		this.startingTroops = startingTroops;
 	}
-	
+
+	public void setTo(Hero hero) {
+		this.specialty = hero.specialty;
+		this.firstSkill = hero.firstSkill;
+		this.secondSkill = hero.secondSkill;
+		this.spellBook = hero.spellBook;
+		this.startingTroops = hero.startingTroops;
+	}
+
 	public boolean isChanged(Hero originalHero) {
 		if (!this.getSpecialty().equals(originalHero.getSpecialty())) {
 			return true;
@@ -142,7 +150,7 @@ public class Hero {
 
 	public ByteBuffer getByteBuffer() {
 		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 9);
-		
+
 		buffer.putInt(this.firstSkill.getTrait().getBytes());
 		buffer.putInt(this.firstSkill.getLevel().getBytes());
 		buffer.putInt(this.secondSkill.getTrait().getBytes());
@@ -158,7 +166,7 @@ public class Hero {
 		buffer.putInt(this.startingTroops[1].getBytes());
 		buffer.putInt(this.startingTroops[2].getBytes());
 		buffer.flip();
-		
+
 		return buffer;
 	}
 

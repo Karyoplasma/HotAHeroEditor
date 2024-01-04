@@ -40,6 +40,22 @@ public class ChangesTableModel extends AbstractTableModel {
 	public void resize() {
 		this.resizeChangesColumnWidth();
 	}
+	
+	public void loadChanges(List<Hero> changes) {
+		this.changedHeroes.clear();
+		for (Hero hero : changes) {
+			Hero listedHero = this.gui.getComboBoxHero().getItemAt(hero.getHeader().ordinal());
+			listedHero.setTo(hero);
+			changedHeroes.add(listedHero);
+		}
+		this.gui.getBtnUnlock().setEnabled(true);
+		this.gui.getBtnDiscardAll().setEnabled(true);
+		this.gui.getBtnSave().setEnabled(true);
+		this.resize();
+		this.gui.getComboBoxHero().setSelectedIndex(-1);
+		this.gui.getComboBoxHero().setSelectedItem(changedHeroes.get(0));
+		this.gui.getFrame().repaint();
+	}
 
 	public void discardAll() {
 		for (Hero changed : this.changedHeroes) {
@@ -56,6 +72,9 @@ public class ChangesTableModel extends AbstractTableModel {
 		this.gui.getBtnWrite().setEnabled(false);
 		this.gui.getBtnUnlock().setEnabled(true);
 		this.resize();
+		this.gui.getComboBoxHero().setSelectedIndex(-1);
+		this.gui.getComboBoxHero().setSelectedIndex(0);
+		this.gui.getFrame().repaint();
 	}
 
 	public List<Hero> getChanges() {
@@ -72,6 +91,7 @@ public class ChangesTableModel extends AbstractTableModel {
 				this.gui.getBtnSave().setEnabled(true);
 				this.gui.getBtnUnlock().setEnabled(true);
 				this.resize();
+				fireTableDataChanged();
 				return;
 			} else {
 				return;
@@ -86,10 +106,11 @@ public class ChangesTableModel extends AbstractTableModel {
 					this.gui.getBtnUnlock().setEnabled(false);
 				}
 				this.resize();
+				fireTableDataChanged();				
 				return;
 			} else {
-				fireTableDataChanged();
 				this.resize();
+				fireTableDataChanged();
 				return;
 			}
 		}

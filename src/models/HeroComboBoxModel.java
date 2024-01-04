@@ -11,11 +11,11 @@ public class HeroComboBoxModel extends AbstractListModel<Hero> implements ComboB
 	private static final long serialVersionUID = -5398761852991588727L;
 	private List<Hero> heroList;
 	private Hero selected;
-	
+
 	public HeroComboBoxModel(List<Hero> heroes) {
 		this.heroList = heroes;
 	}
-	
+
 	@Override
 	public int getSize() {
 		return heroList.size();
@@ -28,9 +28,9 @@ public class HeroComboBoxModel extends AbstractListModel<Hero> implements ComboB
 
 	@Override
 	public void setSelectedItem(Object anItem) {
-		selected = (Hero) anItem;		
+		selected = (Hero) anItem;
 	}
-	
+
 	@Override
 	public Object getSelectedItem() {
 		return selected;
