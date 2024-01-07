@@ -560,8 +560,8 @@ public class HotAHeroEditor {
 		this.comboBoxSecondTroop.setEnabled(true);
 		this.comboBoxThirdTroop.setModel(new CreatureComboBoxModel(isHotA, false));
 		this.comboBoxThirdTroop.setEnabled(true);
-		this.specialtyCreature.setModel(new CreatureComboBoxModel(isHotA, true));
-		this.specialtyCreatureStatic.setModel(new CreatureComboBoxModel(isHotA, true));
+		this.specialtyCreature.setModel(new CreatureSpecialtyComboBoxModel(isHotA));
+		this.specialtyCreatureStatic.setModel(new CreatureSpecialtyComboBoxModel(isHotA));
 		this.specialtyConversionResult.setModel(new CreatureComboBoxModel(isHotA, false));
 		this.specialtyFirstConversion.setModel(new CreatureComboBoxModel(isHotA, false));
 		this.specialtySecondConversion.setModel(new CreatureComboBoxModel(isHotA, false));
