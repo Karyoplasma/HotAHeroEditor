@@ -14,7 +14,7 @@ public class HeroTraitComboBoxModel extends AbstractListModel<HeroTrait> impleme
 	private List<HeroTrait> heroTraits;
 	private HeroTrait selected;
 	
-	public HeroTraitComboBoxModel(boolean isHota, boolean isSecondSkill) {
+	public HeroTraitComboBoxModel(boolean isHota, boolean isSecondSkill, boolean isSpecialty) {
 		this.heroTraits = new ArrayList<HeroTrait>();
 		for (HeroTrait trait : HeroTrait.values()) {
 			if (trait == HeroTrait.INTERFERENCE && !isHota) {
@@ -25,6 +25,9 @@ public class HeroTraitComboBoxModel extends AbstractListModel<HeroTrait> impleme
 		this.heroTraits.remove(HeroTrait.DEBUG);
 		if (!isSecondSkill) {
 			this.heroTraits.remove(HeroTrait.NONE);
+		}
+		if (isSpecialty) {
+			this.heroTraits.remove(HeroTrait.ARTILLERY);
 		}
 	}
 	

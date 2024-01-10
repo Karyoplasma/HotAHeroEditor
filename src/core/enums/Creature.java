@@ -183,7 +183,6 @@ public enum Creature {
 	CRIMSON_COUATL("Crimson Couatl", "Crimson Couatls", 0xB7000000),
 	DREADNOUGHT("Dreadnought", "Dreadnoughts", 0xB8000000),
 	JUGGERNAUT("Juggernaut", "Juggernauts", 0xB9000000),
-	NONE("None", "None", 0xFFFFFFFF),
 	DEBUG("DEBUG", "DEBUG", 0xDEADBEEF);
 
 	private String name, pluralName;

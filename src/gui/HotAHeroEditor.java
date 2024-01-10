@@ -547,9 +547,9 @@ public class HotAHeroEditor {
 		this.comboBoxFirstSkillLevel.setEnabled(true);
 		this.comboBoxSecondSkillLevel.setModel(new SkillLevelComboBoxModel());
 		this.comboBoxSecondSkillLevel.setEnabled(true);
-		this.comboBoxFirstSkill.setModel(new HeroTraitComboBoxModel(isHotA, false));
+		this.comboBoxFirstSkill.setModel(new HeroTraitComboBoxModel(isHotA, false, false));
 		this.comboBoxFirstSkill.setEnabled(true);
-		this.comboBoxSecondSkill.setModel(new HeroTraitComboBoxModel(isHotA, true));
+		this.comboBoxSecondSkill.setModel(new HeroTraitComboBoxModel(isHotA, true, false));
 		this.comboBoxSecondSkill.setEnabled(true);
 		this.comboBoxSecondSkill.addItemListener(new HeroTraitComboBoxListener(this));
 		this.comboBoxSpell.setModel(new SpellComboBoxModel());
@@ -567,7 +567,7 @@ public class HotAHeroEditor {
 		this.specialtySecondConversion.setModel(new CreatureComboBoxModel(isHotA, false));
 		this.specialtySpell.setModel(new SpellSpecialtyComboBoxModel());
 		this.specialtyResources.setModel(new ResourceComboBoxModel());
-		this.specialtySkill.setModel(new HeroTraitComboBoxModel(isHotA, false));
+		this.specialtySkill.setModel(new HeroTraitComboBoxModel(isHotA, false, true));
 		this.comboBoxSpecialty.setModel(new SpecialtyComboBoxModel(isHotA));
 		this.comboBoxSpecialty.addItemListener(new SpecialtyComboBoxListener(this));
 		this.comboBoxSpecialty.setEnabled(true);

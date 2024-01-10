@@ -26,7 +26,6 @@ public class CreatureComboBoxModel extends AbstractListModel<Creature> implement
 		this.creatures.remove(Creature.CATAPULT);	
 		if (isHotA) {
 			this.creatures.remove(Creature.ELECTRIC_TOWER);
-			this.creatures.remove(Creature.NONE);
 			this.creatures.remove(Creature.DEBUG);
 		}
 		if (!isSecondSlot) {
