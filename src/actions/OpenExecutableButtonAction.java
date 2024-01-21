@@ -43,6 +43,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 	private Path getH3Executable() {
 		File executable;
 		boolean saveDirectoyPreference = false;
+		this.saveDirectory = gui.getSaveDirectory();
 		if (this.saveDirectory == null) {
 			executable = new File(System.getProperty("user.dir"));
 			this.saveDirectory = executable.toPath();
@@ -55,7 +56,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Executables", "exe"));
 		fileChooser.setCurrentDirectory(executable.isDirectory() ? executable : executable.getParentFile());
 
-		int ret = fileChooser.showOpenDialog(null);
+		int ret = fileChooser.showOpenDialog(gui.getFrame());
 		if (ret == (JFileChooser.APPROVE_OPTION)) {
 			executable = fileChooser.getSelectedFile();
 			if (!(executable.getName().toLowerCase().matches("h3hota(\\shd)?.exe")
@@ -100,6 +101,7 @@ public class OpenExecutableButtonAction extends AbstractAction {
 		try {
 			Files.write(preferenceFilePath, content.getBytes(), StandardOpenOption.CREATE,
 					StandardOpenOption.TRUNCATE_EXISTING);
+			this.gui.setSaveDirectory(directory);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

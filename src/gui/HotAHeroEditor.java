@@ -83,13 +83,6 @@ public class HotAHeroEditor {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.initializeSaveDirectory();
-		this.originalHeroes = ModFileHandler.readOriginalHeroes();
-		if (this.originalHeroes == null) {
-			JOptionPane.showMessageDialog(null,
-					"There was an error while reading the original heroes.\nPlease restart the program to fix this issue!",
-					"Fatal Error", JOptionPane.ERROR_MESSAGE);
-		}
 		frmHommHeroEditor = new JFrame();
 		frmHommHeroEditor.setTitle("HoMM3 Hero Editor");
 		frmHommHeroEditor.setBounds(100, 100, 800, 600);
@@ -97,7 +90,15 @@ public class HotAHeroEditor {
 		frmHommHeroEditor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmHommHeroEditor.getContentPane()
 				.setLayout(new MigLayout("", "[][][350px:n][grow][][]", "[][][][][][][][grow][][][grow][]"));
-
+		
+		this.initializeSaveDirectory();
+		this.originalHeroes = ModFileHandler.readOriginalHeroes();
+		if (this.originalHeroes == null) {
+			JOptionPane.showMessageDialog(this.frmHommHeroEditor,
+					"There was an error while reading the original heroes.\nPlease restart the program to fix this issue!",
+					"Fatal Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
 		chckbxSaveDirectory = new JCheckBox("Save directory");
 		chckbxSaveDirectory.setSelected(true);
 		frmHommHeroEditor.getContentPane().add(chckbxSaveDirectory, "cell 1 0,grow");
@@ -269,7 +270,6 @@ public class HotAHeroEditor {
 		btnDiscardAll.setEnabled(false);
 		btnDiscardAll.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frmHommHeroEditor.getContentPane().add(btnDiscardAll, "cell 5 11");
-
 	}
 
 	private Component createCreatureSpecialtyPanel() {
@@ -403,7 +403,11 @@ public class HotAHeroEditor {
 	public JButton getBtnChange() {
 		return btnChange;
 	}
-
+	
+	public Path getSaveDirectory() {
+		return this.saveDirectory;
+	}
+	
 	public JComboBox<HeroTrait> getComboBoxFirstSkill() {
 		return comboBoxFirstSkill;
 	}
@@ -538,6 +542,10 @@ public class HotAHeroEditor {
 	public void setSpecialtyOptionsPanel(JPanel specialtyOptions) {
 		this.panelSpecialtyOptions = specialtyOptions;
 		this.frmHommHeroEditor.repaint();
+	}
+	
+	public void setSaveDirectory(Path saveDirectory) {
+		this.saveDirectory = saveDirectory;
 	}
 	
 	public static void setTotalCreatures(int creatures) {

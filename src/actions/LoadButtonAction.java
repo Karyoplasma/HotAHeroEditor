@@ -53,7 +53,7 @@ public class LoadButtonAction extends AbstractAction {
 		JFileChooser fileChooser = new JFileChooser("Select changes you saved");
 		fileChooser.setFileFilter(new FileNameExtensionFilter("mod files", "mod"));
 		fileChooser.setCurrentDirectory(directory);
-		int ret = fileChooser.showOpenDialog(null);
+		int ret = fileChooser.showOpenDialog(gui.getFrame());
 		if (ret == (JFileChooser.APPROVE_OPTION)) {
 			return fileChooser.getSelectedFile();
 		}
