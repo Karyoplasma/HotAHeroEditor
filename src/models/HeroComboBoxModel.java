@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
@@ -11,10 +12,21 @@ public class HeroComboBoxModel extends AbstractListModel<Hero> implements ComboB
 	private List<Hero> heroList;
 	private Hero selected;
 
-	public HeroComboBoxModel(List<Hero> heroes) {
+	public HeroComboBoxModel(List<Hero> heroes, int totalHeroes) {
 		this.heroList = heroes;
+		List<Hero> toRemove = new ArrayList<Hero>();
+		for (Hero hero : this.heroList) {
+			if (hero.getHeader().ordinal() > totalHeroes) {
+				toRemove.add(hero);
+			}
+		}
+		this.heroList.removeAll(toRemove);
 	}
-
+	
+	public boolean hasElement(Hero hero) {
+		return this.heroList.contains(hero);
+	}
+	
 	@Override
 	public int getSize() {
 		return heroList.size();

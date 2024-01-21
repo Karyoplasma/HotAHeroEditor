@@ -14,7 +14,7 @@ public class CreatureComboBoxModel extends AbstractListModel<Creature> implement
 	private List<Creature> creatures;
 	private Creature selected;
 	
-	public CreatureComboBoxModel(boolean isHotA, boolean isSecondSlot) {
+	public CreatureComboBoxModel(boolean isHotA, boolean isSecondSlot, int totalCreatures) {
 		this.creatures = new ArrayList<Creature>();
 		for (Creature creature : Creature.values()) {
 			if (creature.hotaOnly() && !isHotA) {
@@ -36,7 +36,19 @@ public class CreatureComboBoxModel extends AbstractListModel<Creature> implement
 				this.creatures.remove(Creature.CANNON);
 			}
 		}
+		List<Creature> toRemove = new ArrayList<Creature>();
+		for (Creature creature : this.creatures) {
+			if (creature.ordinal() > totalCreatures) {
+				toRemove.add(creature);
+			}
+		}
+		this.creatures.removeAll(toRemove);
 	}
+	
+	public boolean hasElement(Creature creature) {
+		return this.creatures.contains(creature);
+	}
+	
 	@Override
 	public int getSize() {
 		return this.creatures.size();
@@ -57,5 +69,6 @@ public class CreatureComboBoxModel extends AbstractListModel<Creature> implement
 	public Object getSelectedItem() {
 		return selected;
 	}
+	
 
 }

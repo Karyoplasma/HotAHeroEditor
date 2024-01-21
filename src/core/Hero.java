@@ -9,7 +9,17 @@ import core.enums.HeroHeader;
 import core.enums.HeroTrait;
 import core.enums.Profession;
 import core.enums.Race;
+import core.enums.SpecialtyType;
 import core.enums.Spell;
+import core.specialties.CreatureConversionSpecialty;
+import core.specialties.CreatureSpecialty;
+import core.specialties.StaticCreatureSpecialty;
+import gui.HotAHeroEditor;
+import models.CreatureComboBoxModel;
+import models.CreatureSpecialtyComboBoxModel;
+import models.HeroComboBoxModel;
+import models.HeroTraitComboBoxModel;
+import models.SpecialtyComboBoxModel;
 
 public class Hero {
 	private HeroHeader header;
@@ -148,6 +158,62 @@ public class Hero {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isCompatibleWithVersion(HotAHeroEditor gui) {
+		if (!((HeroComboBoxModel) gui.getComboBoxHero().getModel()).hasElement(this)) {
+			return false;
+		}
+		if (!((HeroTraitComboBoxModel) gui.getComboBoxFirstSkill().getModel()).hasElement(this.firstSkill.getTrait())) {
+			return false;
+		}
+		if (!((HeroTraitComboBoxModel) gui.getComboBoxSecondSkill().getModel()).hasElement(this.secondSkill.getTrait())) {
+			return false;
+		}
+		switch (specialty.getType()) {
+		case FREDERICK_SPECIALTY:
+			if (!((SpecialtyComboBoxModel) gui.getComboBoxSpecialty().getModel()).hasElement(SpecialtyType.FREDERICK_SPECIALTY)) {
+				return false;
+			}
+			break;
+		case CREATURE_BONUS_STATIC:
+			if (!((CreatureSpecialtyComboBoxModel) gui.getSpecialtyCreatureStatic().getModel()).hasElement(((StaticCreatureSpecialty) this.specialty).getCreature())){ 
+				return false;
+			}
+			break;
+		case CREATURE_BONUS_LEVEL:
+			if (!((CreatureSpecialtyComboBoxModel) gui.getSpecialtyCreature().getModel()).hasElement(((CreatureSpecialty) this.specialty).getCreature())){ 
+				// bug in the original file
+				if (((CreatureSpecialty) this.specialty).getCreature() == Creature.CRUSADER) {
+					break;
+				}
+				return false;
+			}
+			break;
+		case CREATURE_CONVERSION:
+			if (!((CreatureComboBoxModel) gui.getSpecialtyFirstConversion().getModel()).hasElement(((CreatureConversionSpecialty) this.specialty).getFirstAllowed())){ 
+				return false;
+			}
+			if (!((CreatureComboBoxModel) gui.getSpecialtySecondConversion().getModel()).hasElement(((CreatureConversionSpecialty) this.specialty).getSecondAllowed())){ 
+				return false;
+			}
+			if (!((CreatureComboBoxModel) gui.getSpecialtyConversionResult().getModel()).hasElement(((CreatureConversionSpecialty) this.specialty).getResult())){ 
+				return false;
+			}
+			break;
+		default:
+			break;
+		}
+		if (!((CreatureComboBoxModel) gui.getComboBoxFirstTroop().getModel()).hasElement(this.startingTroops[0])){ 
+			return false;
+		}
+		if (!((CreatureComboBoxModel) gui.getComboBoxSecondTroop().getModel()).hasElement(this.startingTroops[1])){ 
+			return false;
+		}
+		if (!((CreatureComboBoxModel) gui.getComboBoxThirdTroop().getModel()).hasElement(this.startingTroops[2])){ 
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean isHotaOnly() {

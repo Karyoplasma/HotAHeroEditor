@@ -57,7 +57,8 @@ public class ChangesTableModel extends AbstractTableModel {
 		}
 		this.changedHeroes.clear();
 		for (Hero hero : changes) {
-			if (hero.isHotaOnly() && !this.gui.isHotA()) {
+			//if (hero.isHotaOnly() && !this.gui.isHotA()) {
+			if (!hero.isCompatibleWithVersion(gui)) {
 				notLoaded++;
 			} else {
 				Hero listedHero = this.gui.getComboBoxHero().getItemAt(hero.getHeader().ordinal());

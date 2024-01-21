@@ -12,14 +12,18 @@ public class SpecialtyComboBoxModel extends AbstractListModel<SpecialtyType> imp
 	private List<SpecialtyType> specialtyList;
 	private SpecialtyType selected;
 	
-	public SpecialtyComboBoxModel(boolean isHotA) {
+	public SpecialtyComboBoxModel(boolean isHotA, int totalHeroes) {
 		this.specialtyList = new ArrayList<SpecialtyType>();
 		for (SpecialtyType type : SpecialtyType.values()) {
-			if (type == SpecialtyType.FREDERICK_SPECIALTY && !isHotA) {
+			if (type == SpecialtyType.FREDERICK_SPECIALTY && (!isHotA || totalHeroes < 180)) {
 				continue;
 			}
 			specialtyList.add(type);
 		}
+	}
+	
+	public boolean hasElement(SpecialtyType specialty) {
+		return this.specialtyList.contains(specialty);
 	}
 	
 	@Override

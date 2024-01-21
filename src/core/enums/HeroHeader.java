@@ -200,13 +200,15 @@ public enum HeroHeader {
 	TAVIN("Tavin", 0x9610, 0x95AC),
 	MURDOCH("Murdoch", 0x986F, 0x980B);
 	
-	private String name;
+	private final String name;
 	private long specialtyOffset, dataOffset;
+	private boolean isOffsetChanged;
 	
 	private HeroHeader(String name, long specialtyOffset, long dataOffset) {
 		this.name = name;
 		this.specialtyOffset = specialtyOffset;
 		this.dataOffset = dataOffset;
+		this.isOffsetChanged = false;
 	}
 
 	public long getSpecialtyOffset() {
@@ -221,8 +223,32 @@ public enum HeroHeader {
 		return ordinal() > HeroHeader.XERON.ordinal();
 	}
 	
+	public void setSpecialtyOffsetHota(long offset) {
+		if (!this.hotaOnly()) {
+			return;
+		}
+		this.specialtyOffset = offset + 0x64;
+		this.isOffsetChanged = true;
+	}
+	
+	public void setDataOffsetHota(long offset) {
+		if (!this.hotaOnly()) {
+			return;
+		}
+		this.dataOffset = offset;
+		this.isOffsetChanged = true;
+	}
+	
+	public boolean isOffsetChanged() {
+		return this.isOffsetChanged;
+	}
+	
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public void resetOffsetChanged() {
+		this.isOffsetChanged = false;	
 	}
 }

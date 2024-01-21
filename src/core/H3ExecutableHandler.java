@@ -19,6 +19,7 @@ import core.enums.Profession;
 import core.enums.Race;
 import core.enums.SkillLevel;
 import core.enums.Spell;
+import gui.HotAHeroEditor;
 
 public class H3ExecutableHandler {
 
@@ -32,11 +33,18 @@ public class H3ExecutableHandler {
 		FileChannel hotaChannel = null;
 		if (isHotA) {
 			Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
+			int totalHeroes = HotADatFileParser.parseHeroes(hotaDAT);
+			int totalCreatures = HotADatFileParser.parseCreatures(hotaDAT);
+			if (totalHeroes == -1 || totalCreatures == -1) {
+				return heroes;
+			}
+			HotAHeroEditor.setTotalCreatures(totalCreatures);
+			HotAHeroEditor.setTotalHeroes(totalHeroes);
 			hotaChannel = FileChannel.open(hotaDAT, StandardOpenOption.READ);
 		}
 		for (HeroHeader header : HeroHeader.values()) {
 			if (header.hotaOnly()) {
-				if (isHotA) {
+				if (isHotA && header.isOffsetChanged()) {
 					long offsetHeroData = header.getDataOffset();
 					ByteBuffer bufferHeroData = ByteBuffer.allocate(Integer.BYTES * 12);
 					long offsetHeroSpecialty = header.getSpecialtyOffset();

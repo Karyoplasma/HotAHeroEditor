@@ -31,6 +31,10 @@ public class HeroTraitComboBoxModel extends AbstractListModel<HeroTrait> impleme
 		}
 	}
 	
+	public boolean hasElement(HeroTrait trait) {
+		return this.heroTraits.contains(trait);		
+	}
+	
 	@Override
 	public int getSize() {
 		return heroTraits.size();

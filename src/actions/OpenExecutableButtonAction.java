@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import core.H3ExecutableHandler;
 import core.Hero;
+import core.enums.HeroHeader;
 import gui.HotAHeroEditor;
 
 public class OpenExecutableButtonAction extends AbstractAction {
@@ -108,20 +109,21 @@ public class OpenExecutableButtonAction extends AbstractAction {
 	private void readExecutable(Path executable, boolean isHotA) {
 		List<Hero> heroes = new ArrayList<Hero>();
 		try {
+			for (HeroHeader header : HeroHeader.values()) {
+				header.resetOffsetChanged();
+			}
 			heroes = H3ExecutableHandler.readHeroes(executable, isHotA);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(gui.getFrame(),
 					"Error reading heroes from the executable:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
-		if (heroes == null) {
+		if (heroes == null || heroes.isEmpty()) {
 			JOptionPane.showMessageDialog(gui.getFrame(),
-					"This should never happen. If you see this message, please create an issue on GitHub.\nThe heroes list is null.",
+					"There was an error when parsing the hero and creature data. If HotA was recently updated there might have been a change in the .dat file structure.\nError Message: The heroes list is null or empty.",
 					"Fatal error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		if (!heroes.isEmpty()) {
-			gui.resetHeroes(heroes);
-		}
+		gui.resetHeroes(heroes);
 	}
 }

@@ -35,7 +35,9 @@ import java.awt.CardLayout;
 import java.awt.Component;
 
 public class HotAHeroEditor {
-
+	
+	private static int totalHeroes = 156;
+	private static int totalCreatures = 146;
 	private Path saveDirectory;
 	private boolean isHotA;
 	private Map<String, Hero> originalHeroes;
@@ -501,7 +503,15 @@ public class HotAHeroEditor {
 	public JTable getTableChanges() {
 		return tableChanges;
 	}
-
+	
+	public int getTotalHeroes() {
+		return totalHeroes;
+	}
+	
+	public int getTotalCreatures() {
+		return totalCreatures;
+	}
+	
 	public JPanel getSpecialtyOptionsPanel() {
 		return panelSpecialtyOptions;
 	}
@@ -530,6 +540,14 @@ public class HotAHeroEditor {
 		this.frmHommHeroEditor.repaint();
 	}
 	
+	public static void setTotalCreatures(int creatures) {
+		totalCreatures = creatures;
+	}
+	
+	public static void setTotalHeroes(int heroes) {
+		totalHeroes = heroes;
+	}
+	
 	public void forceHeroBoxItemEventTrigger(Hero hero) {
 		if (!comboBoxHero.getSelectedItem().equals(hero)) {
 			comboBoxHero.setSelectedItem(hero);
@@ -554,24 +572,24 @@ public class HotAHeroEditor {
 		this.comboBoxSecondSkill.addItemListener(new HeroTraitComboBoxListener(this));
 		this.comboBoxSpell.setModel(new SpellComboBoxModel());
 		this.comboBoxSpell.setEnabled(true);
-		this.comboBoxFirstTroop.setModel(new CreatureComboBoxModel(isHotA, false));
+		this.comboBoxFirstTroop.setModel(new CreatureComboBoxModel(isHotA, false, totalCreatures));
 		this.comboBoxFirstTroop.setEnabled(true);
-		this.comboBoxSecondTroop.setModel(new CreatureComboBoxModel(isHotA, true));
+		this.comboBoxSecondTroop.setModel(new CreatureComboBoxModel(isHotA, true, totalCreatures));
 		this.comboBoxSecondTroop.setEnabled(true);
-		this.comboBoxThirdTroop.setModel(new CreatureComboBoxModel(isHotA, false));
+		this.comboBoxThirdTroop.setModel(new CreatureComboBoxModel(isHotA, false, totalCreatures));
 		this.comboBoxThirdTroop.setEnabled(true);
-		this.specialtyCreature.setModel(new CreatureSpecialtyComboBoxModel(isHotA));
-		this.specialtyCreatureStatic.setModel(new CreatureSpecialtyComboBoxModel(isHotA));
-		this.specialtyConversionResult.setModel(new CreatureComboBoxModel(isHotA, false));
-		this.specialtyFirstConversion.setModel(new CreatureComboBoxModel(isHotA, false));
-		this.specialtySecondConversion.setModel(new CreatureComboBoxModel(isHotA, false));
+		this.specialtyCreature.setModel(new CreatureSpecialtyComboBoxModel(isHotA, totalCreatures));
+		this.specialtyCreatureStatic.setModel(new CreatureSpecialtyComboBoxModel(isHotA, totalCreatures));
+		this.specialtyConversionResult.setModel(new CreatureComboBoxModel(isHotA, false, totalCreatures));
+		this.specialtyFirstConversion.setModel(new CreatureComboBoxModel(isHotA, false, totalCreatures));
+		this.specialtySecondConversion.setModel(new CreatureComboBoxModel(isHotA, false, totalCreatures));
 		this.specialtySpell.setModel(new SpellSpecialtyComboBoxModel());
 		this.specialtyResources.setModel(new ResourceComboBoxModel());
 		this.specialtySkill.setModel(new HeroTraitComboBoxModel(isHotA, false, true));
-		this.comboBoxSpecialty.setModel(new SpecialtyComboBoxModel(isHotA));
+		this.comboBoxSpecialty.setModel(new SpecialtyComboBoxModel(isHotA, totalHeroes));
 		this.comboBoxSpecialty.addItemListener(new SpecialtyComboBoxListener(this));
 		this.comboBoxSpecialty.setEnabled(true);
-		this.comboBoxHero.setModel(new HeroComboBoxModel(heroes));
+		this.comboBoxHero.setModel(new HeroComboBoxModel(heroes, totalHeroes));
 		this.comboBoxHero.addItemListener(new HeroComboBoxItemListener(this));
 		this.comboBoxHero.setEnabled(true);
 		this.comboBoxHero.setSelectedItem(heroes.get(0));
