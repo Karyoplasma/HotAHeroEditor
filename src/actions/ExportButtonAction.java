@@ -11,13 +11,13 @@ import core.ModFileHandler;
 import gui.HotAHeroEditor;
 import models.ChangesTableModel;
 
-public class SaveButtonAction extends AbstractAction {
+public class ExportButtonAction extends AbstractAction {
 
 	private static final long serialVersionUID = -4803017960981133994L;
 	private HotAHeroEditor gui;
 
-	public SaveButtonAction(HotAHeroEditor gui) {
-		putValue(Action.NAME, "Save");
+	public ExportButtonAction(HotAHeroEditor gui) {
+		putValue(Action.NAME, "Export");
 		this.gui = gui;
 	}
 

@@ -1,10 +1,9 @@
 package gui;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
-import javax.swing.JFrame;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -15,27 +14,58 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SpinnerNumberModel;
-import actions.*;
-import core.Hero;
-import core.ModFileHandler;
-import core.enums.*;
-import models.*;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JSpinner;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Component;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import actions.ChangeButtonAction;
+import actions.DiscardAllButtonAction;
+import actions.HeroComboBoxItemListener;
+import actions.HeroTraitComboBoxListener;
+import actions.LoadButtonAction;
+import actions.OpenExecutableButtonAction;
+import actions.ExportButtonAction;
+import actions.SpecialtyComboBoxListener;
+import actions.UnlockButtonAction;
+import actions.WriteButtonAction;
+import core.Hero;
+import core.ModFileHandler;
+import core.enums.Creature;
+import core.enums.HeroTrait;
+import core.enums.Resource;
+import core.enums.SkillLevel;
+import core.enums.SpecialtyType;
+import core.enums.Spell;
+import models.ChangesTableModel;
+import models.CreatureComboBoxModel;
+import models.CreatureSpecialtyComboBoxModel;
+import models.HeroComboBoxModel;
+import models.HeroTraitComboBoxModel;
+import models.ResourceComboBoxModel;
+import models.SkillLevelComboBoxModel;
+import models.SpecialtyComboBoxModel;
+import models.SpellComboBoxModel;
+import models.SpellSpecialtyComboBoxModel;
+import net.miginfocom.swing.MigLayout;
 
 public class HotAHeroEditor {
-	
+    
+	private static final Logger logger = LogManager.getLogger(HotAHeroEditor.class);
+
 	private static int totalHeroes = 156;
 	private static int totalCreatures = 146;
 	private Path saveDirectory;
@@ -77,12 +107,14 @@ public class HotAHeroEditor {
 	 */
 	public HotAHeroEditor() {
 		initialize();
+		logger.info("Initializing done.");
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		logger.info("Initializing...");
 		frmHommHeroEditor = new JFrame();
 		frmHommHeroEditor.setTitle("HoMM3 Hero Editor");
 		frmHommHeroEditor.setBounds(100, 100, 800, 600);
@@ -261,7 +293,7 @@ public class HotAHeroEditor {
 		btnLoad.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frmHommHeroEditor.getContentPane().add(btnLoad, "cell 0 11,grow");
 
-		btnSave = new JButton(new SaveButtonAction(this));
+		btnSave = new JButton(new ExportButtonAction(this));
 		btnSave.setEnabled(false);
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frmHommHeroEditor.getContentPane().add(btnSave, "cell 1 11,grow");
@@ -367,7 +399,7 @@ public class HotAHeroEditor {
 		try (BufferedReader reader = new BufferedReader(new FileReader("resources/directoryPath.txt"))) {
 			this.saveDirectory = Paths.get(reader.readLine());
 		} catch (IOException e) {
-			// ignore error
+			logger.error("Exception while reading save directory:", e);
 		}
 
 	}
@@ -568,6 +600,7 @@ public class HotAHeroEditor {
 	}
 	
 	public void resetHeroes(List<Hero> heroes) {
+		logger.info("Initializing components...");
 		// initialize components
 		this.comboBoxFirstSkillLevel.setModel(new SkillLevelComboBoxModel());
 		this.comboBoxFirstSkillLevel.setEnabled(true);
@@ -603,5 +636,6 @@ public class HotAHeroEditor {
 		this.comboBoxHero.setSelectedItem(heroes.get(0));
 
 		this.tableChanges.setModel(new ChangesTableModel(this, heroes));
+		logger.info("Finished setting up components.");
 	}
 }

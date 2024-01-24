@@ -11,6 +11,10 @@ import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import core.enums.Creature;
 import core.enums.Gender;
 import core.enums.HeroHeader;
@@ -22,12 +26,13 @@ import core.enums.Spell;
 import gui.HotAHeroEditor;
 
 public class H3ExecutableHandler {
-
+	private static final Logger logger = LogManager.getLogger(H3ExecutableHandler.class);
 	private H3ExecutableHandler() {
 
 	}
 
 	public static List<Hero> readHeroes(Path executable, boolean isHotA) throws IOException {
+		logger.info("Reading " + executable.getFileName());
 		List<Hero> heroes = new ArrayList<Hero>();
 		FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.READ);
 		FileChannel hotaChannel = null;
@@ -98,6 +103,7 @@ public class H3ExecutableHandler {
 	}
 	
 	public static int createBackup(Path executable) {
+		logger.info("Creating backup of " + executable.getFileName() +" before writing changes...");
 		File parentDirectory = executable.getParent().toFile();
 		File backupFolder = new File(parentDirectory, "backupHeroModder");
 		if (!backupFolder.exists() && !backupFolder.mkdir()) {
@@ -107,23 +113,29 @@ public class H3ExecutableHandler {
 		try {
 			Path destinationPath = backupFile.toPath();
 			Files.copy(executable, destinationPath);
+			logger.info("Backup of " + executable.getFileName() +" successful!");
 			return 0;
 		} catch (IOException e) {
+			logger.error("Error encountered while backing up " + executable.getFileName(), e);
 			return 2;
 		}
 	}
 
 	public static int writeAllChanges(List<Hero> changes, Path executable) {
 		if (executable == null) {
+			logger.warn("No executable selected when writing changes!");
 			return 1;
 		}
 		if (!executable.toFile().exists()) {
+			logger.error("Executable " + executable.getFileName() + " does not exist!");
 			return 2;
 		}
 		if (executable.toFile().isDirectory()) {
+			logger.error("Executable " + executable.getFileName() + " is a directory!");
 			return 3;
 		}
 		try {
+			logger.info("Writing changes to " + executable.getFileName());
 			FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.WRITE);
 			Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
 			FileChannel hotaChannel = FileChannel.open(hotaDAT, StandardOpenOption.WRITE);
@@ -147,9 +159,11 @@ public class H3ExecutableHandler {
 			}
 			fileChannel.close();
 			hotaChannel.close();
+			logger.info("Successfully written changes!");
 			return 0;
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("Error encountered while writing changes:", e);
 			return 4;
 		}
 		

@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import core.enums.Creature;
 import core.enums.Gender;
 import core.enums.HeroHeader;
@@ -26,7 +29,8 @@ import core.enums.SkillLevel;
 import core.enums.Spell;
 
 public class ModFileHandler {
-
+	private static final Logger logger = LogManager.getLogger(ModFileHandler.class);
+	
 	private ModFileHandler() {
 
 	}
@@ -34,6 +38,7 @@ public class ModFileHandler {
 	public static List<Hero> readModFileFromDisk(Path modFile) {
 		List<Hero> ret = new ArrayList<Hero>();
 		try {
+			logger.info("Reading mod file from disk...");
 			BufferedReader reader = new BufferedReader(new FileReader(modFile.toFile()));
 			String in;
 			while ((in = reader.readLine()) != null) {
@@ -69,12 +74,14 @@ public class ModFileHandler {
 			return ret;
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("Exception encountered while reading mod file:", e);
 			return null;
 		}
 	}
 	
 	public static String writeModFileToDisk(List<Hero> changes) {
 		try {
+			logger.info("Writing mod file to disk...");
 			Date date = Date.from(Instant.now());
 			String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
 			String fileName = timestamp + ".mod";
@@ -127,6 +134,7 @@ public class ModFileHandler {
 			return path.getFileName().toString();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
+			logger.error("Exception encountered while writing mod file to disk:", ioe);
 			return "Could not write changes to disk.";
 		}		
 	}
@@ -134,6 +142,7 @@ public class ModFileHandler {
 	public static Map<String, Hero> readOriginalHeroes() {
 		Map<String, Hero> ret = new HashMap<String, Hero>();
 		try {
+			logger.info("Reading original heroes...");
 			BufferedReader reader = new BufferedReader(new FileReader("resources/originalHeroes"));
 			String in;
 			while ((in = reader.readLine()) != null) {
@@ -169,6 +178,7 @@ public class ModFileHandler {
 			return ret;
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("Exception encountered while reading original heroes:", e);
 			return null;
 		}
 	}

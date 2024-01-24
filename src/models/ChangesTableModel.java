@@ -8,11 +8,15 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import core.Hero;
 import gui.HotAHeroEditor;
 
 public class ChangesTableModel extends AbstractTableModel {
-
+	private static final Logger logger = LogManager.getLogger(ChangesTableModel.class);
 	private static final long serialVersionUID = -6106115281402023971L;
 	List<Hero> changedHeroes;
 
@@ -20,6 +24,7 @@ public class ChangesTableModel extends AbstractTableModel {
 	private String[] columnNames = { "Hero", "Vanilla", "Changed" };
 
 	public ChangesTableModel(HotAHeroEditor hotAHeroEditor, List<Hero> heroes) {
+		logger.info("Initializing ChangesTableModel...");
 		this.gui = hotAHeroEditor;
 		this.changedHeroes = new ArrayList<Hero>();
 		for (Hero hero : heroes) {
@@ -39,6 +44,7 @@ public class ChangesTableModel extends AbstractTableModel {
 			this.gui.getBtnUnlock().setEnabled(false);
 			this.gui.getBtnDiscardAll().setEnabled(false);
 		}
+		logger.debug(String.format("Initialized ChangesTableModel with %d changes.", this.changedHeroes.size()));
 	}
 
 	public void resize() {
@@ -46,6 +52,7 @@ public class ChangesTableModel extends AbstractTableModel {
 	}
 	
 	public int loadChanges(List<Hero> changes) {
+		logger.info("Loading changes from disk...");
 		int notLoaded = 0;
 		for (Hero changed : this.changedHeroes) {
 			Hero heroOriginal = new Hero(this.gui.getOriginalHero(changed.getName()));
@@ -79,10 +86,12 @@ public class ChangesTableModel extends AbstractTableModel {
 			this.gui.getBtnSave().setEnabled(false);
 			this.gui.getFrame().repaint();
 		}
+		logger.info(String.format("%d changes loaded, %d discarded.", changedHeroes.size(), notLoaded));
 		return notLoaded;
 	}
 
 	public void discardAll() {
+		logger.info("Discarding all changes...");
 		for (Hero changed : this.changedHeroes) {
 			Hero heroOriginal = new Hero(this.gui.getOriginalHero(changed.getName()));
 			changed.setSpecialty(heroOriginal.getSpecialty());
@@ -111,6 +120,7 @@ public class ChangesTableModel extends AbstractTableModel {
 		Hero currentChange = this.searchChangesFor(hero);
 		if (currentChange == null) {
 			if (hero.isChanged(original)) {
+				logger.debug("Adding hero change for " + hero.toString());
 				this.changedHeroes.add(hero);
 				this.gui.getBtnDiscardAll().setEnabled(true);
 				this.gui.getBtnSave().setEnabled(true);
@@ -124,6 +134,7 @@ public class ChangesTableModel extends AbstractTableModel {
 		} else {
 			if (!hero.isChanged(original)) {
 				this.changedHeroes.remove(currentChange);
+				logger.debug("Removed hero change for " + currentChange.toString());
 				if (this.changedHeroes.isEmpty()) {
 					this.gui.getBtnDiscardAll().setEnabled(false);
 					this.gui.getBtnSave().setEnabled(false);

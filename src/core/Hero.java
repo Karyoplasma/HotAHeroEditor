@@ -3,6 +3,9 @@ package core;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import core.enums.Creature;
 import core.enums.Gender;
 import core.enums.HeroHeader;
@@ -22,6 +25,7 @@ import models.HeroTraitComboBoxModel;
 import models.SpecialtyComboBoxModel;
 
 public class Hero {
+	private static final Logger logger = LogManager.getLogger(Hero.class);
 	private HeroHeader header;
 	private Gender gender;
 	private Race race;
@@ -162,22 +166,27 @@ public class Hero {
 	
 	public boolean isCompatibleWithVersion(HotAHeroEditor gui) {
 		if (!((HeroComboBoxModel) gui.getComboBoxHero().getModel()).hasElement(this)) {
+			logger.debug(String.format("%s does not exist in loaded version.", this.toString()));
 			return false;
 		}
 		if (!((HeroTraitComboBoxModel) gui.getComboBoxFirstSkill().getModel()).hasElement(this.firstSkill.getTrait())) {
+			logger.debug(String.format("%s does not exist in loaded version.", this.firstSkill.getTrait()));
 			return false;
 		}
 		if (!((HeroTraitComboBoxModel) gui.getComboBoxSecondSkill().getModel()).hasElement(this.secondSkill.getTrait())) {
+			logger.debug(String.format("%s does not exist in loaded version.", this.secondSkill.getTrait()));
 			return false;
 		}
 		switch (specialty.getType()) {
 		case FREDERICK_SPECIALTY:
 			if (!((SpecialtyComboBoxModel) gui.getComboBoxSpecialty().getModel()).hasElement(SpecialtyType.FREDERICK_SPECIALTY)) {
+				logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 				return false;
 			}
 			break;
 		case CREATURE_BONUS_STATIC:
 			if (!((CreatureSpecialtyComboBoxModel) gui.getSpecialtyCreatureStatic().getModel()).hasElement(((StaticCreatureSpecialty) this.specialty).getCreature())){ 
+				logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 				return false;
 			}
 			break;
@@ -187,17 +196,21 @@ public class Hero {
 				if (((CreatureSpecialty) this.specialty).getCreature() == Creature.CRUSADER) {
 					break;
 				}
+				logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 				return false;
 			}
 			break;
 		case CREATURE_CONVERSION:
 			if (!((CreatureComboBoxModel) gui.getSpecialtyFirstConversion().getModel()).hasElement(((CreatureConversionSpecialty) this.specialty).getFirstAllowed())){ 
+				logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 				return false;
 			}
 			if (!((CreatureComboBoxModel) gui.getSpecialtySecondConversion().getModel()).hasElement(((CreatureConversionSpecialty) this.specialty).getSecondAllowed())){ 
+				logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 				return false;
 			}
 			if (!((CreatureComboBoxModel) gui.getSpecialtyConversionResult().getModel()).hasElement(((CreatureConversionSpecialty) this.specialty).getResult())){ 
+				logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 				return false;
 			}
 			break;
@@ -205,12 +218,15 @@ public class Hero {
 			break;
 		}
 		if (!((CreatureComboBoxModel) gui.getComboBoxFirstTroop().getModel()).hasElement(this.startingTroops[0])){ 
+			logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 			return false;
 		}
 		if (!((CreatureComboBoxModel) gui.getComboBoxSecondTroop().getModel()).hasElement(this.startingTroops[1])){ 
+			logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 			return false;
 		}
 		if (!((CreatureComboBoxModel) gui.getComboBoxThirdTroop().getModel()).hasElement(this.startingTroops[2])){ 
+			logger.debug(String.format("%s does not exist in loaded version.", this.specialty.toString()));
 			return false;
 		}
 		return true;
