@@ -28,6 +28,7 @@ Link to latest release: https://github.com/Karyoplasma/HotAHeroEditor/releases/l
 + **Automatic Backups**
 	+ Creates backups before attempting to modify the game files
 		+ *Note:* The backup folder is never cleared, so it's up to you to clean it out from time to time
+	+ The backup folder is created in your game directory and is called "backupHeroModder". The backups are direct copies from the .exe (and HotA.dat if modding HotA) and suffixed with a timestamp. Just delete the timestamp and cut and paste them back to the game directory if you want to undo changes or an error occurs.
 
 ### Still a beta release ###
 
