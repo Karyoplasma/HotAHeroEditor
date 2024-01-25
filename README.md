@@ -3,6 +3,8 @@
 A GUI-driven editor for heroes' traits, specialty and starting army.
 Usable but feature-incomplete. It will be receiving updates based on feedback.
 
+Link to latest release: https://github.com/Karyoplasma/HotAHeroEditor/releases/latest
+
 ## Features ##
 
 + **GUI-driven** edits
@@ -30,3 +32,7 @@ Usable but feature-incomplete. It will be receiving updates based on feedback.
 ### Still a beta release ###
 
 Please report any problems you encounter by opening a new issue on here on github and attaching the HotAHeroEditor.log file from the programs directory.
+
+### Information if you want to build yourself
+
+I don't use a build manager, so I included the Eclipse .project file and the .classpath. Dependencies are MigLayout (1.5) and log4j-core and -api (2.22.1). I might migrate to a build manager later, I'll update this section in that case.
