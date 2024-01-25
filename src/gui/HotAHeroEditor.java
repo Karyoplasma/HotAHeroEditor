@@ -315,7 +315,7 @@ public class HotAHeroEditor {
 		menuBar = new JMenuBar();
 		frmHommHeroEditor.setJMenuBar(menuBar);
 		
-		mnActions = new JMenu("Actions");
+		mnActions = new JMenu("Shortcuts");
 		menuBar.add(mnActions);
 		
 		mntmOpenGameDir = new JMenuItem(new OpenGameDirectoryMenuAction(this));
