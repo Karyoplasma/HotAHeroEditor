@@ -3,6 +3,7 @@ package actions;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -27,6 +28,7 @@ public class WriteButtonAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		List<Hero> changes = ((ChangesTableModel) this.gui.getTableChanges().getModel()).getChanges();
+		String timeStamp = Long.toString(Instant.now().getEpochSecond());
 		if (changes == null || changes.isEmpty()) {
 			JOptionPane.showMessageDialog(this.gui.getFrame(),
 					"No changes found. This shouldn't happen.\nYour executable has not been changed.", "Error",
@@ -35,7 +37,7 @@ public class WriteButtonAction extends AbstractAction {
 		}
 		Path executable = this.gui.getExecutable();
 		
-		int errorCode = H3ExecutableHandler.createBackup(executable);
+		int errorCode = H3ExecutableHandler.createBackup(executable, timeStamp);
 		if (errorCode == 1) {
 			JOptionPane.showMessageDialog(this.gui.getFrame(),
 					"Could not create backup directory. Please create a directory \"backupHeroModder\" in your HoMM folder and try again.\nYour executable has not been changed.",
@@ -52,7 +54,7 @@ public class WriteButtonAction extends AbstractAction {
 		if (this.gui.isHotA()) {
 			Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
 			
-			errorCode = H3ExecutableHandler.createBackup(hotaDAT);			
+			errorCode = H3ExecutableHandler.createBackup(hotaDAT, timeStamp);			
 			if (errorCode == 1) {
 				JOptionPane.showMessageDialog(this.gui.getFrame(),
 						"Could not create backup directory. Please create a directory \"backupHeroModder\" in your HotA folder and try again.\nYour files have not been changed.",
@@ -95,7 +97,7 @@ public class WriteButtonAction extends AbstractAction {
 		if (errorCode == 4) {
 			JOptionPane.showMessageDialog(this.gui.getFrame(),
 					"Fatal error during the writing process.\nPlease restore the files from the backup folder before playing.",
-					"Fatal Error", JOptionPane.ERROR);
+					"Fatal Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 	}

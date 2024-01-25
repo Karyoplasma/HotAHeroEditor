@@ -32,8 +32,14 @@ public class ChangesTableModel extends AbstractTableModel {
 				this.changedHeroes.add(hero);
 			}
 		}
-		this.gui.getBtnLoad().setEnabled(true);
-		this.gui.getBtnChange().setEnabled(true);
+		this.gui.getBtnWrite().setEnabled(false);
+		if (heroes.isEmpty()) {
+			this.gui.getBtnLoad().setEnabled(false);
+			this.gui.getBtnChange().setEnabled(false);
+		} else {
+			this.gui.getBtnLoad().setEnabled(true);
+			this.gui.getBtnChange().setEnabled(true);
+		}	
 		if (!this.changedHeroes.isEmpty()) {
 			this.gui.getBtnSave().setEnabled(true);
 			this.gui.getBtnUnlock().setEnabled(true);

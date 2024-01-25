@@ -27,7 +27,7 @@ public class ExportButtonAction extends AbstractAction {
 		String filename = ModFileHandler.writeModFileToDisk(changes);
 		if (!filename.equals("Could not write changes to disk.") && !filename.equals("No parent folder.")) {
 			JOptionPane.showMessageDialog(this.gui.getFrame(),
-					String.format("%d changes have been written to:\n%s", changes.size(), filename), "Success",
+					String.format("%d changes have been exported to:\n%s", changes.size(), filename), "Success",
 					JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			JOptionPane.showMessageDialog(this.gui.getFrame(), filename, "Error", JOptionPane.ERROR_MESSAGE);

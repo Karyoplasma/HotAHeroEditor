@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,15 +26,14 @@ import gui.HotAHeroEditor;
 
 public class H3ExecutableHandler {
 	private static final Logger logger = LogManager.getLogger(H3ExecutableHandler.class);
+
 	private H3ExecutableHandler() {
 
 	}
 
-	public static List<Hero> readHeroes(Path executable, boolean isHotA) throws IOException {
+	public static List<Hero> readHeroes(Path executable, boolean isHotA) {
 		logger.info("Reading " + executable.getFileName());
 		List<Hero> heroes = new ArrayList<Hero>();
-		FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.READ);
-		FileChannel hotaChannel = null;
 		if (isHotA) {
 			Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
 			int totalHeroes = HotADatFileParser.parseHeroes(hotaDAT);
@@ -45,52 +43,70 @@ public class H3ExecutableHandler {
 			}
 			HotAHeroEditor.setTotalCreatures(totalCreatures);
 			HotAHeroEditor.setTotalHeroes(totalHeroes);
-			hotaChannel = FileChannel.open(hotaDAT, StandardOpenOption.READ);
-		}
-		for (HeroHeader header : HeroHeader.values()) {
-			if (header.hotaOnly()) {
-				if (isHotA && header.isOffsetChanged()) {
-					long offsetHeroData = header.getDataOffset();
-					ByteBuffer bufferHeroData = ByteBuffer.allocate(Integer.BYTES * 12);
-					long offsetHeroSpecialty = header.getSpecialtyOffset();
-					ByteBuffer bufferSpecialtyData = ByteBuffer.allocate(Integer.BYTES * 7);					
-					hotaChannel.read(bufferHeroData, offsetHeroData);
-					hotaChannel.read(bufferSpecialtyData, offsetHeroSpecialty);
-					bufferHeroData.flip();
-					bufferSpecialtyData.flip();
-					heroes.add(createHeroFromBuffers(header, bufferHeroData, bufferSpecialtyData));
-				} else {
-					continue;
+			try (FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.READ);
+					FileChannel hotaChannel = FileChannel.open(hotaDAT, StandardOpenOption.READ)) {
+				for (HeroHeader header : HeroHeader.values()) {
+					if (header.hotaOnly()) {
+						if (header.isOffsetChanged()) {
+							long offsetHeroData = header.getDataOffset();
+							ByteBuffer bufferHeroData = ByteBuffer.allocate(Integer.BYTES * 12);
+							long offsetHeroSpecialty = header.getSpecialtyOffset();
+							ByteBuffer bufferSpecialtyData = ByteBuffer.allocate(Integer.BYTES * 7);
+							hotaChannel.read(bufferHeroData, offsetHeroData);
+							hotaChannel.read(bufferSpecialtyData, offsetHeroSpecialty);
+							bufferHeroData.flip();
+							bufferSpecialtyData.flip();
+							heroes.add(createHeroFromBuffers(header, bufferHeroData, bufferSpecialtyData));
+						}
+					} else {
+						long offsetHeroData = header.getDataOffset();
+						ByteBuffer bufferHeroData = ByteBuffer.allocate(Integer.BYTES * 12);
+						long offsetHeroSpecialty = header.getSpecialtyOffset();
+						ByteBuffer bufferSpecialtyData = ByteBuffer.allocate(Integer.BYTES * 7);
+						fileChannel.read(bufferHeroData, offsetHeroData);
+						fileChannel.read(bufferSpecialtyData, offsetHeroSpecialty);
+						bufferHeroData.flip();
+						bufferSpecialtyData.flip();
+						heroes.add(createHeroFromBuffers(header, bufferHeroData, bufferSpecialtyData));
+					}
 				}
-			} else {
-				long offsetHeroData = header.getDataOffset();
-				ByteBuffer bufferHeroData = ByteBuffer.allocate(Integer.BYTES * 12);
-				long offsetHeroSpecialty = header.getSpecialtyOffset();
-				ByteBuffer bufferSpecialtyData = ByteBuffer.allocate(Integer.BYTES * 7);
-				fileChannel.read(bufferHeroData, offsetHeroData);
-				fileChannel.read(bufferSpecialtyData, offsetHeroSpecialty);
-				bufferHeroData.flip();
-				bufferSpecialtyData.flip();
-				heroes.add(createHeroFromBuffers(header, bufferHeroData, bufferSpecialtyData));
-			}	
+			} catch (IOException e) {
+				logger.error("Exception encountered while reading heroes:", e);
+				return heroes;
+			}
+		} else {
+			try (FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.READ)) {
+				for (HeroHeader header : HeroHeader.values()) {
+					if (!header.hotaOnly()) {
+						long offsetHeroData = header.getDataOffset();
+						ByteBuffer bufferHeroData = ByteBuffer.allocate(Integer.BYTES * 12);
+						long offsetHeroSpecialty = header.getSpecialtyOffset();
+						ByteBuffer bufferSpecialtyData = ByteBuffer.allocate(Integer.BYTES * 7);
+						fileChannel.read(bufferHeroData, offsetHeroData);
+						fileChannel.read(bufferSpecialtyData, offsetHeroSpecialty);
+						bufferHeroData.flip();
+						bufferSpecialtyData.flip();
+						heroes.add(createHeroFromBuffers(header, bufferHeroData, bufferSpecialtyData));
+					}
+				}
+			} catch (IOException e) {
+				logger.error("Exception encountered while reading heroes:", e);
+			}
 		}
-		
-		fileChannel.close();
-		if (hotaChannel != null) {
-			hotaChannel.close();
-		}
-		
 		return heroes;
 	}
 
-	private static Hero createHeroFromBuffers(HeroHeader header, ByteBuffer bufferHeroData, ByteBuffer bufferSpecialtyData) {
+	private static Hero createHeroFromBuffers(HeroHeader header, ByteBuffer bufferHeroData,
+			ByteBuffer bufferSpecialtyData) {
 		Gender gender = (bufferHeroData.getInt() == 0x00000000) ? Gender.MALE : Gender.FEMALE;
 		Race race = Race.getRaceByBytes(bufferHeroData.getInt());
 		Profession profession = Profession.getProfessionByBytes(bufferHeroData.getInt());
 		HeroTrait skill1 = HeroTrait.getHeroTraitByBytes(bufferHeroData.getInt());
-		SecondarySkill secondary1 = new SecondarySkill(skill1, SkillLevel.values()[Integer.reverseBytes(bufferHeroData.getInt())]);
+		SecondarySkill secondary1 = new SecondarySkill(skill1,
+				SkillLevel.values()[Integer.reverseBytes(bufferHeroData.getInt())]);
 		HeroTrait skill2 = HeroTrait.getHeroTraitByBytes(bufferHeroData.getInt());
-		SecondarySkill secondary2 = new SecondarySkill(skill2, SkillLevel.values()[Integer.reverseBytes(bufferHeroData.getInt())]);
+		SecondarySkill secondary2 = new SecondarySkill(skill2,
+				SkillLevel.values()[Integer.reverseBytes(bufferHeroData.getInt())]);
 		bufferHeroData.getInt();
 		SpellBook spellBook = new SpellBook(Spell.getSpellByBytes(bufferHeroData.getInt()));
 		Creature[] startingTroops = new Creature[3];
@@ -98,22 +114,23 @@ public class H3ExecutableHandler {
 			startingTroops[i] = Creature.getCreatureByBytes(bufferHeroData.getInt());
 		}
 		Specialty specialty = SpecialtyFactory.createSpecialtyFromBuffer(bufferSpecialtyData);
-		Hero hero = new Hero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook, startingTroops);
+		Hero hero = new Hero(header, gender, race, profession, specialty, secondary1, secondary2, spellBook,
+				startingTroops);
 		return hero;
 	}
-	
-	public static int createBackup(Path executable) {
-		logger.info("Creating backup of " + executable.getFileName() +" before writing changes...");
+
+	public static int createBackup(Path executable, String timeStamp) {
+		logger.info("Creating backup of " + executable.getFileName() + " before writing changes...");
 		File parentDirectory = executable.getParent().toFile();
 		File backupFolder = new File(parentDirectory, "backupHeroModder");
 		if (!backupFolder.exists() && !backupFolder.mkdir()) {
 			return 1;
 		}
-		File backupFile = new File(backupFolder, executable.toFile().getName() + "_" + Instant.now().getEpochSecond());
+		File backupFile = new File(backupFolder, executable.toFile().getName() + "_" + timeStamp);
 		try {
 			Path destinationPath = backupFile.toPath();
 			Files.copy(executable, destinationPath);
-			logger.info("Backup of " + executable.getFileName() +" successful!");
+			logger.info("Backup of " + executable.getFileName() + " successful!");
 			return 0;
 		} catch (IOException e) {
 			logger.error("Error encountered while backing up " + executable.getFileName(), e);
@@ -122,10 +139,7 @@ public class H3ExecutableHandler {
 	}
 
 	public static int writeAllChanges(List<Hero> changes, Path executable) {
-		if (executable == null) {
-			logger.warn("No executable selected when writing changes!");
-			return 1;
-		}
+		logger.info("Writing changes to " + executable.getFileName());
 		if (!executable.toFile().exists()) {
 			logger.error("Executable " + executable.getFileName() + " does not exist!");
 			return 2;
@@ -134,38 +148,56 @@ public class H3ExecutableHandler {
 			logger.error("Executable " + executable.getFileName() + " is a directory!");
 			return 3;
 		}
-		try {
-			logger.info("Writing changes to " + executable.getFileName());
-			FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.WRITE);
-			Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
-			FileChannel hotaChannel = FileChannel.open(hotaDAT, StandardOpenOption.WRITE);
-			
-			for (Hero hero : changes) {
-				if (hero.getHeader().hotaOnly()) {
-					long hotaDataOffset = hero.getDataOffset() + 0xC;
-					long hotaSpecialtyOffset = hero.getSpecialtyOffset();
-					ByteBuffer hotaHeroData = hero.getByteBuffer();
-					ByteBuffer hotaSpecialtyData = hero.getSpecialty().getByteBuffer();
-					hotaChannel.write(hotaSpecialtyData, hotaSpecialtyOffset);
-					hotaChannel.write(hotaHeroData, hotaDataOffset);
-				} else {
-					long dataOffset = hero.getDataOffset() + 0xC;
-					long specialtyOffset = hero.getSpecialtyOffset();
-					ByteBuffer heroData = hero.getByteBuffer();
-					ByteBuffer specialtyData = hero.getSpecialty().getByteBuffer();
-					fileChannel.write(specialtyData, specialtyOffset);
-					fileChannel.write(heroData, dataOffset);
+		Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
+		if (Files.exists(hotaDAT)) {
+			try (FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.WRITE);
+					FileChannel hotaChannel = FileChannel.open(hotaDAT, StandardOpenOption.WRITE)) {
+				for (Hero hero : changes) {
+					if (hero.getHeader().hotaOnly()) {
+						long hotaDataOffset = hero.getDataOffset() + 0xC;
+						long hotaSpecialtyOffset = hero.getSpecialtyOffset();
+						ByteBuffer hotaHeroData = hero.getByteBuffer();
+						ByteBuffer hotaSpecialtyData = hero.getSpecialty().getByteBuffer();
+						hotaChannel.write(hotaSpecialtyData, hotaSpecialtyOffset);
+						hotaChannel.write(hotaHeroData, hotaDataOffset);
+					} else {
+						long dataOffset = hero.getDataOffset() + 0xC;
+						long specialtyOffset = hero.getSpecialtyOffset();
+						ByteBuffer heroData = hero.getByteBuffer();
+						ByteBuffer specialtyData = hero.getSpecialty().getByteBuffer();
+						fileChannel.write(specialtyData, specialtyOffset);
+						fileChannel.write(heroData, dataOffset);
+					}
 				}
+				logger.info("Successfully written changes!");
+				return 0;
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error("Error encountered while writing changes:", e);
+				return 4;
 			}
-			fileChannel.close();
-			hotaChannel.close();
-			logger.info("Successfully written changes!");
-			return 0;
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("Error encountered while writing changes:", e);
-			return 4;
+		} else {
+			try (FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.WRITE)) {
+				for (Hero hero : changes) {
+					if (hero.getHeader().hotaOnly()) {
+						logger.warn("There was an attemp to write HotA changes when HotA.dat does not exist!");
+						continue;
+					} else {
+						long dataOffset = hero.getDataOffset() + 0xC;
+						long specialtyOffset = hero.getSpecialtyOffset();
+						ByteBuffer heroData = hero.getByteBuffer();
+						ByteBuffer specialtyData = hero.getSpecialty().getByteBuffer();
+						fileChannel.write(specialtyData, specialtyOffset);
+						fileChannel.write(heroData, dataOffset);
+					}
+				}
+				logger.info("Successfully written changes!");
+				return 0;
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error("Error encountered while writing changes:", e);
+				return 4;
+			}
 		}
-		
 	}
 }

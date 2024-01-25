@@ -633,8 +633,12 @@ public class HotAHeroEditor {
 		this.comboBoxHero.setModel(new HeroComboBoxModel(heroes, totalHeroes));
 		this.comboBoxHero.addItemListener(new HeroComboBoxItemListener(this));
 		this.comboBoxHero.setEnabled(true);
-		this.comboBoxHero.setSelectedItem(heroes.get(0));
-
+		
+		if (!heroes.isEmpty()) {
+			this.comboBoxHero.setSelectedItem(heroes.get(0));
+		} else {
+			logger.warn("The list of heroes is empty!");
+		}
 		this.tableChanges.setModel(new ChangesTableModel(this, heroes));
 		logger.info("Finished setting up components.");
 	}

@@ -37,9 +37,8 @@ public class ModFileHandler {
 	
 	public static List<Hero> readModFileFromDisk(Path modFile) {
 		List<Hero> ret = new ArrayList<Hero>();
-		try {
-			logger.info("Reading mod file from disk...");
-			BufferedReader reader = new BufferedReader(new FileReader(modFile.toFile()));
+		logger.info("Reading mod file from disk...");
+		try (BufferedReader reader = new BufferedReader(new FileReader(modFile.toFile()))){
 			String in;
 			while ((in = reader.readLine()) != null) {
 				String[] inSplit = in.split(";");
@@ -70,29 +69,28 @@ public class ModFileHandler {
 						startingTroops);
 				ret.add(hero);
 			}
-			reader.close();
 			return ret;
 		} catch (IOException e) {
-			e.printStackTrace();
 			logger.error("Exception encountered while reading mod file:", e);
 			return null;
 		}
 	}
 	
 	public static String writeModFileToDisk(List<Hero> changes) {
-		try {
-			logger.info("Writing mod file to disk...");
-			Date date = Date.from(Instant.now());
-			String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
-			String fileName = timestamp + ".mod";
-			Path path = Paths.get("mods/" + fileName);
-			if (path.getParent() == null) {
-				return "No parent folder.";
-			}
-			if (!path.getParent().toFile().exists()) {
-				path.getParent().toFile().mkdir();
-			}
-			BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()));
+		logger.info("Writing mod file to disk...");
+		Date date = Date.from(Instant.now());
+		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+		String fileName = timestamp + ".mod";
+		Path path = Paths.get("mods/" + fileName);
+		if (path.getParent() == null) {
+			logger.error("HotAHeroEditor is running in a root directory!");
+			return "No parent folder.";
+		}
+		if (!path.getParent().toFile().exists()) {
+			logger.debug("Created the mod file directory.");
+			path.getParent().toFile().mkdir();
+		}
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()));){
 			for (Hero hero : changes) {
 				writer.write(Integer.toString(hero.getHeader().ordinal()));
 				writer.write(";");
@@ -130,20 +128,17 @@ public class ModFileHandler {
 					}
 				}
 			}
-			writer.close();
-			return path.getFileName().toString();
+			return path.toFile().getAbsolutePath().toString();
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
 			logger.error("Exception encountered while writing mod file to disk:", ioe);
 			return "Could not write changes to disk.";
 		}		
 	}
 	
 	public static Map<String, Hero> readOriginalHeroes() {
+		logger.info("Reading original heroes...");
 		Map<String, Hero> ret = new HashMap<String, Hero>();
-		try {
-			logger.info("Reading original heroes...");
-			BufferedReader reader = new BufferedReader(new FileReader("resources/originalHeroes"));
+		try (BufferedReader reader = new BufferedReader(new FileReader("resources/originalHeroes"));){
 			String in;
 			while ((in = reader.readLine()) != null) {
 				String[] inSplit = in.split(";");
@@ -174,10 +169,8 @@ public class ModFileHandler {
 						startingTroops);
 				ret.put(header.toString(), hero);
 			}
-			reader.close();
 			return ret;
 		} catch (IOException e) {
-			e.printStackTrace();
 			logger.error("Exception encountered while reading original heroes:", e);
 			return null;
 		}
