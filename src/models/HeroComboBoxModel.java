@@ -23,6 +23,10 @@ public class HeroComboBoxModel extends AbstractListModel<Hero> implements ComboB
 		this.heroList.removeAll(toRemove);
 	}
 	
+	public List<Hero> getHeroes(){
+		return this.heroList;
+	}
+	
 	public boolean hasElement(Hero hero) {
 		return this.heroList.contains(hero);
 	}

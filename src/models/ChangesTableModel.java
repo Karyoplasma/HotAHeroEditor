@@ -33,6 +33,7 @@ public class ChangesTableModel extends AbstractTableModel {
 			}
 		}
 		this.gui.getBtnWrite().setEnabled(false);
+		this.gui.getBtnUnlock().setEnabled(true);
 		if (heroes.isEmpty()) {
 			this.gui.getBtnLoad().setEnabled(false);
 			this.gui.getBtnChange().setEnabled(false);
@@ -41,13 +42,11 @@ public class ChangesTableModel extends AbstractTableModel {
 			this.gui.getBtnChange().setEnabled(true);
 		}	
 		if (!this.changedHeroes.isEmpty()) {
-			this.gui.getBtnSave().setEnabled(true);
-			this.gui.getBtnUnlock().setEnabled(true);
+			this.gui.getBtnSave().setEnabled(true);		
 			this.gui.getBtnDiscardAll().setEnabled(true);
 			this.resize();
 		} else {
 			this.gui.getBtnSave().setEnabled(false);
-			this.gui.getBtnUnlock().setEnabled(false);
 			this.gui.getBtnDiscardAll().setEnabled(false);
 		}
 		logger.debug(String.format("Initialized ChangesTableModel with %d changes.", this.changedHeroes.size()));
@@ -80,14 +79,13 @@ public class ChangesTableModel extends AbstractTableModel {
 			}
 		}
 		if (!changedHeroes.isEmpty()) {
-			this.gui.getBtnUnlock().setEnabled(true);
 			this.gui.getBtnDiscardAll().setEnabled(true);
 			this.gui.getBtnSave().setEnabled(true);
 			this.resize();
 			this.gui.forceHeroBoxItemEventTrigger(changedHeroes.get(0));
 			this.gui.getFrame().repaint();
 		} else {
-			this.gui.getBtnUnlock().setEnabled(false);
+			logger.warn("Loaded empty changes file.");
 			this.gui.getBtnDiscardAll().setEnabled(false);
 			this.gui.getBtnSave().setEnabled(false);
 			this.gui.getFrame().repaint();
@@ -145,7 +143,6 @@ public class ChangesTableModel extends AbstractTableModel {
 					this.gui.getBtnDiscardAll().setEnabled(false);
 					this.gui.getBtnSave().setEnabled(false);
 					this.gui.getBtnWrite().setEnabled(false);
-					this.gui.getBtnUnlock().setEnabled(false);
 				}
 				this.resize();
 				fireTableDataChanged();				

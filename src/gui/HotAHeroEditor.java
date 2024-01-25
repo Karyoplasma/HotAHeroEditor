@@ -42,6 +42,8 @@ import actions.ExportButtonAction;
 import actions.SpecialtyComboBoxListener;
 import actions.UnlockButtonAction;
 import actions.WriteButtonAction;
+import actions.OpenGameDirectoryMenuAction;
+import actions.OpenModFolderMenuAction;
 import core.Hero;
 import core.ModFileHandler;
 import core.enums.Creature;
@@ -61,6 +63,9 @@ import models.SpecialtyComboBoxModel;
 import models.SpellComboBoxModel;
 import models.SpellSpecialtyComboBoxModel;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class HotAHeroEditor {
     
@@ -88,6 +93,10 @@ public class HotAHeroEditor {
 	private JComboBox<SpecialtyType> comboBoxSpecialty;
 	private JComboBox<SkillLevel> comboBoxFirstSkillLevel, comboBoxSecondSkillLevel;
 	private Path executable;
+	private JMenuBar menuBar;
+	private JMenu mnActions;
+	private JMenuItem mntmOpenGameDir;
+	private JMenuItem mntmOpenModFolder;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -162,7 +171,7 @@ public class HotAHeroEditor {
 		comboBoxSpecialty.setEnabled(false);
 		comboBoxSpecialty.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frmHommHeroEditor.getContentPane().add(comboBoxSpecialty, "cell 1 2,growx,aligny center");
-
+		
 		specialtyCreatureAttack = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		specialtyCreatureAttack.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		specialtyCreatureDefense = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
@@ -302,6 +311,18 @@ public class HotAHeroEditor {
 		btnDiscardAll.setEnabled(false);
 		btnDiscardAll.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frmHommHeroEditor.getContentPane().add(btnDiscardAll, "cell 5 11");
+		
+		menuBar = new JMenuBar();
+		frmHommHeroEditor.setJMenuBar(menuBar);
+		
+		mnActions = new JMenu("Actions");
+		menuBar.add(mnActions);
+		
+		mntmOpenGameDir = new JMenuItem(new OpenGameDirectoryMenuAction(this));
+		mnActions.add(mntmOpenGameDir);
+		
+		mntmOpenModFolder = new JMenuItem(new OpenModFolderMenuAction());
+		mnActions.add(mntmOpenModFolder);
 	}
 
 	private Component createCreatureSpecialtyPanel() {
@@ -396,6 +417,7 @@ public class HotAHeroEditor {
 	}
 
 	private void initializeSaveDirectory() {
+		logger.info("Reading save directory...");
 		try (BufferedReader reader = new BufferedReader(new FileReader("resources/directoryPath.txt"))) {
 			this.saveDirectory = Paths.get(reader.readLine());
 		} catch (IOException e) {

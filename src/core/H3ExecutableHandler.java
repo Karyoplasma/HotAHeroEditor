@@ -180,7 +180,7 @@ public class H3ExecutableHandler {
 			try (FileChannel fileChannel = FileChannel.open(executable, StandardOpenOption.WRITE)) {
 				for (Hero hero : changes) {
 					if (hero.getHeader().hotaOnly()) {
-						logger.warn("There was an attemp to write HotA changes when HotA.dat does not exist!");
+						logger.warn("There was an attempt to write HotA changes when HotA.dat does not exist!");
 						continue;
 					} else {
 						long dataOffset = hero.getDataOffset() + 0xC;
