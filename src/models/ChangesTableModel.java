@@ -18,9 +18,9 @@ import gui.HotAHeroEditor;
 public class ChangesTableModel extends AbstractTableModel {
 	private static final Logger logger = LogManager.getLogger(ChangesTableModel.class);
 	private static final long serialVersionUID = -6106115281402023971L;
-	List<Hero> changedHeroes;
+	private List<Hero> changedHeroes;
 
-	HotAHeroEditor gui;
+	private HotAHeroEditor gui;
 	private String[] columnNames = { "Hero", "Vanilla", "Changed" };
 
 	public ChangesTableModel(HotAHeroEditor hotAHeroEditor, List<Hero> heroes) {

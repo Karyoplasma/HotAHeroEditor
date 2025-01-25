@@ -39,6 +39,7 @@ import actions.HeroTraitComboBoxListener;
 import actions.LoadButtonAction;
 import actions.OpenExecutableButtonAction;
 import actions.ExportButtonAction;
+import actions.GenerateChangelogButtonAction;
 import actions.SpecialtyComboBoxListener;
 import actions.UnlockButtonAction;
 import actions.WriteButtonAction;
@@ -97,6 +98,7 @@ public class HotAHeroEditor {
 	private JMenu mnActions;
 	private JMenuItem mntmOpenGameDir;
 	private JMenuItem mntmOpenModFolder;
+	private JButton btnGenerateChangelog;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -306,6 +308,10 @@ public class HotAHeroEditor {
 		btnSave.setEnabled(false);
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		frmHommHeroEditor.getContentPane().add(btnSave, "cell 1 11,grow");
+		
+		btnGenerateChangelog = new JButton(new GenerateChangelogButtonAction(this));
+		btnGenerateChangelog.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		frmHommHeroEditor.getContentPane().add(btnGenerateChangelog, "cell 4 11");
 
 		btnDiscardAll = new JButton(new DiscardAllButtonAction(this));
 		btnDiscardAll.setEnabled(false);

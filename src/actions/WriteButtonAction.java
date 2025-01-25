@@ -77,22 +77,6 @@ public class WriteButtonAction extends AbstractAction {
 						"Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			Path h3exe = Paths.get(executable.getParent() + "/Heroes3.exe");
-			
-			errorCode = H3ExecutableHandler.createBackup(h3exe, timeStamp);			
-			if (errorCode == 1) {
-				JOptionPane.showMessageDialog(this.gui.getFrame(),
-						"Could not create backup directory. Please create a directory \"backupHeroModder\" in your HotA folder and try again.\nYour files have not been changed.",
-						"Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			if (errorCode == 2) {
-				JOptionPane.showMessageDialog(this.gui.getFrame(),
-						"Could not create backup file. Try writing the changes again.\nYour files have not been changed.",
-						"Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			
 		}
 		
 		errorCode = H3ExecutableHandler.writeAllChanges(changes, executable);
@@ -146,20 +130,6 @@ public class WriteButtonAction extends AbstractAction {
 			if (this.gui.isHotA()) {
 				Path hotaDAT = Paths.get(executable.getParent() + "/HotA.dat");
 				errorCode = H3ExecutableHandler.createBackup(hotaDAT, timeStamp);			
-				if (errorCode == 1) {
-					JOptionPane.showMessageDialog(this.gui.getFrame(),
-							"Could not create backup directory. Please create a directory \"backupHeroModder\" in your HotA folder and try again.\nYour files have not been changed.",
-							"Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				if (errorCode == 2) {
-					JOptionPane.showMessageDialog(this.gui.getFrame(),
-							"Could not create backup file. Try writing the changes again.\nYour files have not been changed.",
-							"Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				Path h3exe = Paths.get(executable.getParent() + "/Heroes3.exe");
-				errorCode = H3ExecutableHandler.createBackup(h3exe, timeStamp);			
 				if (errorCode == 1) {
 					JOptionPane.showMessageDialog(this.gui.getFrame(),
 							"Could not create backup directory. Please create a directory \"backupHeroModder\" in your HotA folder and try again.\nYour files have not been changed.",
